@@ -60,7 +60,7 @@
   {{- end }}
 
   {{- with .Params.tags }}
-  <ul class="chip-list" aria-label="Tags">
+  <ul class="chip-list" aria-label="{{ i18n "tags_label" | default "Tags" }}">
     {{- range . }}
     {{- $tag := . }}
     <li><a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="chip">

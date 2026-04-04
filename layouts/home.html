@@ -22,10 +22,10 @@
       </div>
     </div>
     <div class="carousel-container">
-      <button class="carousel-btn carousel-btn--prev" aria-label="Previous" disabled>
+      <button class="carousel-btn carousel-btn--prev" aria-label="{{ i18n "carousel_prev" | default "Previous" }}" disabled>
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <button class="carousel-btn carousel-btn--next" aria-label="Next">
+      <button class="carousel-btn carousel-btn--next" aria-label="{{ i18n "carousel_next" | default "Next" }}">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
       <div class="recipe-grid carousel-track">

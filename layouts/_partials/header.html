@@ -1,4 +1,4 @@
-<nav class="top-app-bar" aria-label="Main navigation">
+<nav class="top-app-bar" aria-label="{{ i18n "nav_label" | default "Main navigation" }}">
   <div class="top-app-bar__inner">
     <a href="{{ "/" | relURL }}" class="top-app-bar__headline">
       {{- with site.Params.logo -}}

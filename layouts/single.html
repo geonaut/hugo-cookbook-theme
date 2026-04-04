@@ -3,9 +3,9 @@
 {{- $flag := $flagData.emoji }}
 {{- $flagTag := $flagData.tag }}
 {{- $page := . }}
-<nav class="breadcrumb small-caps" aria-label="Breadcrumbs">
+<nav class="breadcrumb small-caps" aria-label="{{ i18n "breadcrumb_label" | default "Breadcrumbs" }}">
   {{ range .Ancestors.Reverse }}
-  <a href="{{ .RelPermalink }}">{{ if .IsHome }}Home{{ else }}{{ .Title }}{{ end }}</a>
+  <a href="{{ .RelPermalink }}">{{ if .IsHome }}{{ i18n "breadcrumb_home" | default "Home" }}{{ else }}{{ .Title }}{{ end }}</a>
   <span class="breadcrumb__divider">/</span>
   {{ end }}
   <span class="breadcrumb__current">{{ .Title }}</span>
@@ -48,7 +48,7 @@
       </div>
 
       <div class="metadata-line-2">
-        <ul class="chip-list chip-list--small" aria-label="Tags">
+        <ul class="chip-list chip-list--small" aria-label="{{ i18n "tags_label" | default "Tags" }}">
           {{- range .Params.tags }}
           {{- if ne . $flagTag }}
           <li>

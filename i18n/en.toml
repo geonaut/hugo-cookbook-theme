@@ -35,3 +35,21 @@ other = "No recipes found."
 
 [print_recipe]
 other = "Print Recipe"
+
+[breadcrumb_label]
+other = "Breadcrumbs"
+
+[breadcrumb_home]
+other = "Home"
+
+[tags_label]
+other = "Tags"
+
+[carousel_prev]
+other = "Previous"
+
+[carousel_next]
+other = "Next"
+
+[nav_label]
+other = "Main navigation"
