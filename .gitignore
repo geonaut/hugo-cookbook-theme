@@ -1,0 +1,11 @@
+# Hugo build output
+exampleSite/public/
+exampleSite/resources/_gen/
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp

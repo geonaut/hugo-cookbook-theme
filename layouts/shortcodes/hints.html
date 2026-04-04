@@ -1,0 +1,4 @@
+<div class="recipe-hints">
+  {{ if .Get 0 }}<h2>{{ .Get 0 }}</h2>{{ else }}<h2>Hints & Tips</h2>{{ end }}
+  {{ .Inner | markdownify }}
+</div>

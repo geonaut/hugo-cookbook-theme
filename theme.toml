@@ -1,0 +1,18 @@
+name        = "Hugo Cookbook Theme"
+license     = "MIT"
+licenselink = "https://github.com/geonaut/hugo-cookbook-theme/blob/main/LICENSE"
+description = "A clean, Material Design 3 cookbook theme for recipes, food writing, and culinary collections."
+homepage    = "https://github.com/geonaut/hugo-cookbook-theme"
+demosite    = ""
+tags        = ["cookbook", "recipes", "food", "material-design", "responsive", "dark-mode"]
+features    = ["responsive", "dark-mode", "multiple-color-schemes", "i18n"]
+min_version = "0.146.0"
+
+[author]
+  name     = "geonaut"
+  homepage = "https://github.com/geonaut"
+
+[module]
+  [module.hugoVersion]
+    extended = false
+    min      = "0.146.0"

@@ -1,0 +1,73 @@
+{{ define "main" }}
+{{- /*
+  Section names default to "recipes" and "writing".
+  Override via params.recipesSection and params.writingSection in hugo.toml.
+*/ -}}
+{{- $recipesSection := site.Params.recipesSection | default "recipes" }}
+{{- $writingSection := site.Params.writingSection | default "writing" }}
+
+<div class="page-hero">
+  {{ with site.Params.homeEyebrow }}<p class="page-hero__eyebrow small-caps">{{ . }}</p>{{ end }}
+  <h1 class="page-hero__title">{{ .Title | default site.Title }}</h1>
+  {{ with .Description }}<p class="page-hero__subtitle">{{ . }}</p>{{ end }}
+</div>
+
+<div class="home-sections">
+  <!-- Recipes Section (Carousel) -->
+  <section class="home-section carousel-section">
+    <div class="section-header">
+      <h2 class="section-header__title">{{ i18n "home_featured_recipes" | default "Featured Recipes" }}</h2>
+      <div class="carousel-controls-legacy">
+        <a href="{{ $recipesSection | relURL }}" class="section-header__link">{{ i18n "home_see_all" | default "See all →" }}</a>
+      </div>
+    </div>
+    <div class="carousel-container">
+      <button class="carousel-btn carousel-btn--prev" aria-label="Previous" disabled>
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <button class="carousel-btn carousel-btn--next" aria-label="Next">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+      <div class="recipe-grid carousel-track">
+        {{- $featured := where (where site.RegularPages "Section" $recipesSection) "Params.featured" true -}}
+        {{- $latest   := first 8 (where site.RegularPages "Section" $recipesSection) -}}
+        {{- range first 8 (union $featured $latest) }}
+          {{ partial "recipe-card.html" (dict "page" . "hideTags" true) }}
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+  <!-- Writing Section -->
+  {{- $writingPages := first 4 (where site.RegularPages "Section" $writingSection) }}
+  {{- with $writingPages }}
+  <section class="home-section">
+    <div class="section-header">
+      <h2 class="section-header__title">{{ i18n "home_food_writing" | default "Food Writing" }}</h2>
+      <a href="{{ $writingSection | relURL }}" class="section-header__link">{{ i18n "home_see_more_writing" | default "See more writing →" }}</a>
+    </div>
+    <div class="recipe-grid">
+      {{ range . }}
+        {{ partial "writing-card.html" . }}
+      {{ end }}
+    </div>
+  </section>
+  {{- end }}
+
+  <!-- Utility Highlight Cards -->
+  {{ if site.Params.utilityCards }}
+  <section class="home-section home-section--utility">
+    <div class="utility-grid">
+      {{ range site.Params.utilityCards }}
+        {{ partial "utility-card.html" . }}
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+{{ $carousel := resources.Get "js/carousel.js" | minify | fingerprint }}
+<script src="{{ $carousel.RelPermalink }}"></script>
+{{ end }}

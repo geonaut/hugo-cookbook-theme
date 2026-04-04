@@ -1,0 +1,28 @@
+{{- /*
+  recipe-card-compact.html
+  Compact card used in the section index. Carries data attributes for JS filtering.
+  Usage: {{ partial "recipe-card-compact.html" . }}
+*/ -}}
+{{- $flag     := partial "recipe-flag.html" .Params.tags }}
+{{- $course   := index .Params.categories 0 }}
+
+<a href="{{ .RelPermalink }}"
+   class="md3-card md3-card--compact recipe-item"
+   data-course="{{ $course | urlize }}"
+   data-ethnicity="{{ $flag.tag | urlize }}">
+
+  {{- $imgName := or .Params.thumbnail .Params.banner }}
+  {{- with $imgName }}{{- with $.Resources.Get . }}
+  <div class="md3-card__media">
+    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+  </div>
+  {{- end }}{{- end }}
+
+  <div class="md3-card__content">
+    <h3 class="md3-card__title">{{ .Title }}</h3>
+    <p class="md3-card__overline small-caps">
+      {{- with $flag.emoji }}<span class="recipe-flag">{{ . }}</span> {{ end }}
+      {{- $course -}}
+    </p>
+  </div>
+</a>

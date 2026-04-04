@@ -1,0 +1,74 @@
+{{ define "main" }}
+{{- $flags := site.Data.flags }}
+{{- $page := . }}
+<article class="post-article">
+  {{- with .Params.banner }}
+  {{- with $page.Resources.Get . }}
+  <div class="recipe-hero-image">
+    <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}">
+  </div>
+  {{- end }}
+  {{- end }}
+
+  <div class="page-hero">
+    {{- with .Params.categories }}
+    <p class="page-hero__eyebrow">{{ delimit . " · " }}</p>
+    {{- end }}
+    <h1 class="page-hero__title">{{ .Title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+      {{- with .Params.location }} &middot; <span class="post-location">{{ . }}</span>{{ end }}
+    </p>
+    {{- with .Description }}
+    <p class="page-hero__subtitle">{{ . }}</p>
+    {{- end }}
+  </div>
+
+  <hr class="post-divider">
+
+  <div class="post-layout{{ if .Params.sidebar_gallery }} post-layout--with-sidebar{{ end }}">
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+    {{- with .Params.sidebar_gallery }}
+    <aside class="post-gallery-sidebar">
+      <div class="recipe-gallery recipe-gallery--vertical">
+        {{- range . }}
+        {{- with $page.Resources.Get . }}
+        <a href="{{ .RelPermalink }}">
+          <img src="{{ .RelPermalink }}" alt="" loading="lazy">
+        </a>
+        {{- end }}
+        {{- end }}
+      </div>
+    </aside>
+    {{- end }}
+  </div>
+
+  {{- with .Params.gallery }}
+  <div class="post-gallery-bottom">
+    <div class="recipe-gallery recipe-gallery--horizontal">
+      {{- range . }}
+      {{- with $page.Resources.Get . }}
+      <a href="{{ .RelPermalink }}">
+        <img src="{{ .RelPermalink }}" alt="" loading="lazy">
+      </a>
+      {{- end }}
+      {{- end }}
+    </div>
+  </div>
+  {{- end }}
+
+  {{- with .Params.tags }}
+  <ul class="chip-list" aria-label="Tags">
+    {{- range . }}
+    {{- $tag := . }}
+    <li><a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="chip">
+      {{- with index $flags $tag }}<span aria-hidden="true">{{ . }}</span> {{ end }}
+      {{- $tag }}
+    </a></li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</article>
+{{ end }}

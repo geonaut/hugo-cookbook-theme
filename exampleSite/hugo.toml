@@ -1,0 +1,75 @@
+baseURL = "https://example.com/"
+languageCode = "en-US"
+title = "Geonaut's Cookbook"
+
+[outputs]
+  page = ["HTML", "print"]
+
+[outputFormats.print]
+  name = "print"
+  baseName = "index"
+  isHTML = true
+  mediaType = "text/html"
+  path = "print"
+
+[params]
+  homeEyebrow = "Welcome to"
+  description  = "A collection of recipes from around the world."
+  [params.colors]
+    primary = "#1b4332" # A deeper green
+    tertiary = "#9d0208" # A deep red
+
+  [[params.utilityCards]]
+    title = "PDF Cookbook"
+    description = "Download the entire collection as a printable, bookmarked PDF."
+    url = "/pdf-cookbook"
+    icon = "picture_as_pdf"
+    color = "primary"
+
+  [[params.utilityCards]]
+    title = "Foodie Map"
+    description = "An interactive map of my favorite local markets and hidden gems."
+    url = "/map"
+    icon = "location_on"
+    color = "tertiary"
+
+[menus]
+  [[menus.main]]
+    name    = "Recipes"
+    pageRef = "/recipes"
+    weight  = 10
+    [menus.main.params]
+      icon = "menu_book"
+
+  [[menus.main]]
+    name    = "Tags"
+    pageRef = "/tags"
+    weight  = 20
+    [menus.main.params]
+      icon = "label"
+
+  [[menus.main]]
+    name    = "Writing"
+    pageRef = "/writing"
+    weight  = 30
+    [menus.main.params]
+      icon = "edit_note"
+
+
+  [[menus.main]]
+    name    = "About"
+    pageRef = "/about"
+    weight  = 40
+    [menus.main.params]
+      icon = "person"
+
+  [[menus.main]]
+    name    = "Contact"
+    pageRef = "/contact"
+    weight  = 50
+    [menus.main.params]
+      icon = "mail"
+
+[module]
+  [[module.imports]]
+    path = "github.com/geonaut/hugo-cookbook-theme"

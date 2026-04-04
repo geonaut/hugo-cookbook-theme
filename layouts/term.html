@@ -1,0 +1,12 @@
+{{ define "main" }}
+<div class="page-hero">
+  <p class="page-hero__eyebrow">{{ .Data.Singular | title }}</p>
+  <h1 class="page-hero__title">{{ .Title }}</h1>
+</div>
+
+<div class="recipe-grid">
+  {{- range .Pages }}
+  {{ partial "recipe-card.html" (dict "page" .) }}
+  {{- end }}
+</div>
+{{ end }}

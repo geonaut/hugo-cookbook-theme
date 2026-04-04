@@ -1,0 +1,13 @@
+{{ define "main" }}
+<div class="page-hero">
+  <h1 class="page-hero__title">{{ .Title }}</h1>
+  {{- with .Description }}<p class="page-hero__subtitle">{{ . }}</p>{{ end }}
+  {{- with .Content }}<div class="post-content">{{ . }}</div>{{ end }}
+</div>
+
+<div class="post-list">
+  {{- range .Pages }}
+  {{ partial "post-card.html" . }}
+  {{- end }}
+</div>
+{{ end }}

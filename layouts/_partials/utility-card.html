@@ -1,0 +1,13 @@
+<a href="{{ .url | relURL }}" class="md3-card md3-card--utility md3-card--{{ .color | default "primary" }}">
+  <div class="md3-card__content">
+    <div class="md3-card__icon" aria-hidden="true">
+      <span class="material-symbols-outlined">{{ .icon | default "star" }}</span>
+    </div>
+    <div class="md3-card__text">
+      <h3 class="md3-card__title">{{ .title }}</h3>
+      {{- with .description -}}
+      <p class="md3-card__subtitle">{{ . }}</p>
+      {{- end -}}
+    </div>
+  </div>
+</a>

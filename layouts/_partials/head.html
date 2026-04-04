@@ -1,0 +1,164 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+{{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+{{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+
+{{- /*
+  ── Color & Font system ───────────────────────────────────────
+  Colors are loaded from data/palettes/<name>.toml (default: forest).
+  Set params.palette = "ocean" | "spice" | "forest" to switch palettes.
+  Set params.colors.primary / params.colors.tertiary to override individual
+  colors within any palette using color-mix() approximations.
+  Set params.fonts.sans / params.fonts.serif to change typefaces.
+  Set params.fonts.selfHosted = true to skip Google Fonts loading entirely.
+*/ -}}
+{{- $paletteName := site.Params.palette | default "forest" }}
+{{- $palette     := index site.Data.palettes $paletteName }}
+{{- $fontSans    := site.Params.fonts.sans  | default "Inter" }}
+{{- $fontSerif   := site.Params.fonts.serif | default "Lora" }}
+{{- $primaryOverride   := site.Params.colors.primary }}
+{{- $tertiaryOverride  := site.Params.colors.tertiary }}
+
+{{- /* Resolve the effective primary for theme-color meta tag */ -}}
+{{- $themeColor := $primaryOverride }}
+{{- if not $themeColor }}
+  {{- with $palette }}{{- $themeColor = $palette.light.primary }}{{- end }}
+{{- end }}
+<meta name="theme-color" content="{{ $themeColor | default "#2d6a4f" }}">
+
+<style>
+  :root {
+    /* Font stacks */
+    --font-sans:  '{{ $fontSans }}', system-ui, sans-serif;
+    --font-serif: '{{ $fontSerif }}', Georgia, serif;
+    --font-mono:  ui-monospace, 'Cascadia Code', monospace;
+
+    {{ if $palette -}}
+    /* Color tokens — {{ $paletteName }} palette (light) */
+    {{- range $key, $val := $palette.light }}
+    --md-sys-color-{{ $key | replaceRE "_" "-" }}: {{ $val }};
+    {{- end }}
+    {{- else -}}
+    /* Color tokens — custom (color-mix approximations) */
+    --md-sys-color-primary:                      #2d6a4f;
+    --md-sys-color-on-primary:                   #ffffff;
+    --md-sys-color-primary-container:            color-mix(in srgb, #2d6a4f, white 80%);
+    --md-sys-color-on-primary-container:         color-mix(in srgb, #2d6a4f, black 70%);
+    --md-sys-color-secondary:                    color-mix(in srgb, #2d6a4f, #52796f 50%);
+    --md-sys-color-on-secondary:                 #ffffff;
+    --md-sys-color-secondary-container:          color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), white 80%);
+    --md-sys-color-on-secondary-container:       color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), black 70%);
+    --md-sys-color-tertiary:                     #b7472a;
+    --md-sys-color-on-tertiary:                  #ffffff;
+    --md-sys-color-tertiary-container:           color-mix(in srgb, #b7472a, white 80%);
+    --md-sys-color-on-tertiary-container:        color-mix(in srgb, #b7472a, black 70%);
+    --md-sys-color-error:                        #ba1a1a;
+    --md-sys-color-on-error:                     #ffffff;
+    --md-sys-color-error-container:              #ffdad6;
+    --md-sys-color-on-error-container:           #410002;
+    --md-sys-color-background:                   #fbfdf8;
+    --md-sys-color-on-background:                #191c1a;
+    --md-sys-color-surface:                      #fbfdf8;
+    --md-sys-color-on-surface:                   #191c1a;
+    --md-sys-color-surface-variant:              #dce5de;
+    --md-sys-color-on-surface-variant:           #404943;
+    --md-sys-color-outline:                      #707973;
+    --md-sys-color-outline-variant:              #bfc9c1;
+    --md-sys-color-surface-container-lowest:     #ffffff;
+    --md-sys-color-surface-container-low:        #f3f6f1;
+    --md-sys-color-surface-container:            #edf1eb;
+    --md-sys-color-surface-container-high:       #e7ebe6;
+    --md-sys-color-surface-container-highest:    #e2e5e0;
+    {{ end -}}
+
+    {{- /* Per-color overrides — applied on top of any palette */ -}}
+    {{- with $primaryOverride }}
+    --md-sys-color-primary:                      {{ . }};
+    --md-sys-color-primary-container:            color-mix(in srgb, {{ . }}, white 80%);
+    --md-sys-color-on-primary-container:         color-mix(in srgb, {{ . }}, black 70%);
+    {{- end }}
+    {{- with $tertiaryOverride }}
+    --md-sys-color-tertiary:                     {{ . }};
+    --md-sys-color-tertiary-container:           color-mix(in srgb, {{ . }}, white 80%);
+    --md-sys-color-on-tertiary-container:        color-mix(in srgb, {{ . }}, black 70%);
+    {{- end }}
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      {{ if $palette -}}
+      /* Color tokens — {{ $paletteName }} palette (dark) */
+      {{- range $key, $val := $palette.dark }}
+      --md-sys-color-{{ $key | replaceRE "_" "-" }}: {{ $val }};
+      {{- end }}
+      {{- else -}}
+      /* Dark fallback — color-mix approximations */
+      --md-sys-color-primary:                      color-mix(in srgb, #2d6a4f, white 40%);
+      --md-sys-color-on-primary:                   color-mix(in srgb, #2d6a4f, black 80%);
+      --md-sys-color-primary-container:            color-mix(in srgb, #2d6a4f, black 40%);
+      --md-sys-color-on-primary-container:         color-mix(in srgb, #2d6a4f, white 40%);
+      --md-sys-color-secondary:                    color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), white 40%);
+      --md-sys-color-on-secondary:                 color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), black 80%);
+      --md-sys-color-secondary-container:          color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), black 40%);
+      --md-sys-color-on-secondary-container:       color-mix(in srgb, color-mix(in srgb, #2d6a4f, #52796f 50%), white 40%);
+      --md-sys-color-tertiary:                     color-mix(in srgb, #b7472a, white 40%);
+      --md-sys-color-on-tertiary:                  color-mix(in srgb, #b7472a, black 80%);
+      --md-sys-color-tertiary-container:           color-mix(in srgb, #b7472a, black 40%);
+      --md-sys-color-on-tertiary-container:        color-mix(in srgb, #b7472a, white 40%);
+      --md-sys-color-background:                   #191c1a;
+      --md-sys-color-on-background:                #e2e5e0;
+      --md-sys-color-surface:                      #191c1a;
+      --md-sys-color-on-surface:                   #e2e5e0;
+      --md-sys-color-surface-variant:              #404943;
+      --md-sys-color-on-surface-variant:           #bfc9c1;
+      --md-sys-color-outline:                      #8a9490;
+      --md-sys-color-outline-variant:              #404943;
+      --md-sys-color-surface-container-lowest:     #131611;
+      --md-sys-color-surface-container-low:        #191c1a;
+      --md-sys-color-surface-container:            #1d201e;
+      --md-sys-color-surface-container-high:       #272b28;
+      --md-sys-color-surface-container-highest:    #323633;
+      {{ end -}}
+
+      {{- /* Per-color dark overrides */ -}}
+      {{- with $primaryOverride }}
+      --md-sys-color-primary:                      color-mix(in srgb, {{ . }}, white 40%);
+      --md-sys-color-on-primary:                   color-mix(in srgb, {{ . }}, black 80%);
+      --md-sys-color-primary-container:            color-mix(in srgb, {{ . }}, black 40%);
+      --md-sys-color-on-primary-container:         color-mix(in srgb, {{ . }}, white 40%);
+      {{- end }}
+      {{- with $tertiaryOverride }}
+      --md-sys-color-tertiary:                     color-mix(in srgb, {{ . }}, white 40%);
+      --md-sys-color-on-tertiary:                  color-mix(in srgb, {{ . }}, black 80%);
+      --md-sys-color-tertiary-container:           color-mix(in srgb, {{ . }}, black 40%);
+      --md-sys-color-on-tertiary-container:        color-mix(in srgb, {{ . }}, white 40%);
+      {{- end }}
+    }
+  }
+</style>
+
+{{- /*
+  ── Fonts ────────────────────────────────────────────────────
+  Override site.Params.fonts.url to load different Google Fonts.
+  Override site.Params.fonts.iconsUrl to change the icon font.
+  Set site.Params.fonts.selfHosted = true to skip Google Fonts
+  entirely and supply your own @font-face rules via head/extra.html.
+*/ -}}
+{{- $defaultFontsUrl := "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&subset=latin,latin-ext&display=swap" }}
+{{- $defaultIconsUrl := "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" }}
+{{- $selfHosted := site.Params.fonts.selfHosted | default false }}
+{{- if not $selfHosted }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="{{ site.Params.fonts.url | default $defaultFontsUrl }}">
+<link rel="stylesheet" href="{{ site.Params.fonts.iconsUrl | default $defaultIconsUrl }}">
+{{- end }}
+
+{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+{{ partial "head/extra.html" . }}

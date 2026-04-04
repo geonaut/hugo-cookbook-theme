@@ -1,0 +1,32 @@
+{{- $flags := site.Data.flags }}
+{{- $imgName := or .Params.thumbnail .Params.banner }}
+{{- $img := "" }}
+{{- with $imgName }}{{- with $.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}
+<a href="{{ .RelPermalink }}" class="post-card">
+  {{- with $img }}
+  <div class="post-card__media">
+    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+  </div>
+  {{- end }}
+  <div class="post-card__body">
+    <div class="post-card__meta">
+      <time datetime="{{ $.Date.Format "2006-01-02" }}">{{ $.Date.Format "2 January 2006" }}</time>
+      {{- with $.Params.location }} &middot; {{ . }}{{ end }}
+    </div>
+    <h2 class="post-card__title">{{ .Title }}</h2>
+    {{- with .Description }}
+    <p class="post-card__excerpt">{{ . }}</p>
+    {{- end }}
+    {{- with .Params.tags }}
+    <div class="post-card__tags">
+      {{- range first 4 . }}
+      {{- $tag := . }}
+      <span class="chip">
+        {{- with index $flags $tag }}<span aria-hidden="true">{{ . }}</span> {{ end }}
+        {{- $tag }}
+      </span>
+      {{- end }}
+    </div>
+    {{- end }}
+  </div>
+</a>

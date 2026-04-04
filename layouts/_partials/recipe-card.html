@@ -1,0 +1,42 @@
+{{- /*
+  recipe-card.html
+  Usage: {{ partial "recipe-card.html" (dict "page" . "hideTags" false) }}
+*/ -}}
+{{- $page     := .page }}
+{{- $hideTags := .hideTags | default false }}
+
+{{- $flag    := partial "recipe-flag.html" $page.Params.tags }}
+{{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
+{{- $img     := "" }}
+{{- with $imgName }}{{- with $page.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}
+
+<a href="{{ $page.RelPermalink }}" class="md3-card md3-card--compact">
+  {{- with $img }}
+  <div class="md3-card__media">
+    <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}" loading="lazy">
+  </div>
+  {{- end }}
+  <div class="md3-card__content">
+    {{- with $page.Params.categories }}
+    <p class="md3-card__overline small-caps">
+      {{- with $flag.emoji }}<span class="recipe-flag" aria-hidden="true">{{ . }}</span> {{ end }}
+      {{- index . 0 }}
+    </p>
+    {{- end }}
+    <h3 class="md3-card__title">{{ $page.Title }}</h3>
+    {{- with $page.Description }}
+    <p class="md3-card__subtitle">{{ . | truncate 80 }}</p>
+    {{- end }}
+  </div>
+  {{- if and $page.Params.tags (not $hideTags) }}
+  <div class="md3-card__footer">
+    {{- $count := 0 }}
+    {{- range $page.Params.tags }}
+      {{- if and (ne . $flag.tag) (lt $count 4) }}
+        <span class="chip chip--small">{{ . }}</span>
+        {{- $count = add $count 1 }}
+      {{- end }}
+    {{- end }}
+  </div>
+  {{- end }}
+</a>

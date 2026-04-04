@@ -1,0 +1,15 @@
+{{- $page   := .Page }}
+{{- $layout := default "vertical" (.Get "layout") }}
+{{- $images := split (strings.TrimSpace .Inner) "\n" }}
+<div class="recipe-gallery recipe-gallery--{{ $layout }}">
+  {{- range $images }}
+  {{- $name := strings.Trim . "\r " }}
+  {{- if $name }}
+  {{- with $page.Resources.Get $name }}
+  <a href="{{ .RelPermalink }}">
+    <img src="{{ .RelPermalink }}" alt="" loading="lazy">
+  </a>
+  {{- end }}
+  {{- end }}
+  {{- end }}
+</div>

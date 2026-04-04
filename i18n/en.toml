@@ -1,0 +1,37 @@
+# Cookbook theme — English strings
+# Add a matching file (e.g. i18n/fr.toml) to translate the theme UI.
+
+[home_featured_recipes]
+other = "Featured Recipes"
+
+[home_see_all]
+other = "See all →"
+
+[home_food_writing]
+other = "Food Writing"
+
+[home_see_more_writing]
+other = "See more writing →"
+
+[nav_more_items]
+# Receives .Count (unused here) — section title appended in template
+other = "More"
+
+[nav_all_items]
+# "All Recipes →" — section name appended in template
+other = "All"
+
+[filter_aria_label]
+other = "Recipe filters"
+
+[filter_course]
+other = "Course"
+
+[filter_cuisine]
+other = "Cuisine"
+
+[no_recipes_found]
+other = "No recipes found."
+
+[print_recipe]
+other = "Print Recipe"

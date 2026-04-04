@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}">
+<head>
+  <meta charset="utf-8">
+  <title>Print Recipe: {{ .Title }}</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      color: #000;
+      background: #fff;
+      line-height: 1.35;
+      margin: 0;
+      padding: 0.75cm 1.25cm;
+      font-size: 10pt;
+    }
+    .print-header {
+      border-bottom: 1px solid #000;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.5rem;
+    }
+    h1 {
+      margin: 0 0 0.25rem 0;
+      font-size: 22pt;
+    }
+    .category {
+      font-size: 9pt;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 0.25rem;
+    }
+    .description {
+      font-style: italic;
+      margin: 0.25rem 0 0 0;
+      color: #444;
+      font-size: 10pt;
+    }
+    .recipe-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    h2, h3 {
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.1rem;
+      margin: 0.75rem 0 0.4rem 0;
+      font-size: 14pt;
+    }
+    ul, ol {
+      padding-left: 1.1rem;
+      margin: 0.25rem 0;
+    }
+    li {
+      margin-bottom: 0.2rem;
+    }
+    .small-caps {
+      font-variant-caps: small-caps;
+      font-feature-settings: "smcp", "c2sc";
+    }
+    @media print {
+      .no-print { display: none; }
+      body { padding: 0.25cm 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="print-header">
+    {{ with .Params.categories }}<div class="category small-caps">{{ delimit . " · " }}</div>{{ end }}
+    <h1>{{ .Title }}</h1>
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      {{ with .Description }}<p class="description">{{ . }}</p>{{ end }}
+      <time class="small-caps" style="font-size: 9pt; color: #666; margin-left: 1rem;">{{ .Date.Format "January 2006" }}</time>
+    </div>
+  </div>
+
+  <div class="recipe-content">
+    {{ .Content }}
+  </div>
+
+  <script>
+    window.addEventListener('load', function() { window.print(); });
+  </script>
+</body>
+</html>

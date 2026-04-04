@@ -1,0 +1,99 @@
+{{ define "main" }}
+<div class="page-hero">
+  <h1 class="page-hero__title">{{ .Title }}</h1>
+  {{ with .Description }}<p class="page-hero__subtitle">{{ . }}</p>{{ end }}
+</div>
+
+{{- /* Collect all pages in this section recursively */ -}}
+{{- $sectionPages := .RegularPagesRecursive }}
+
+{{- /* Build sorted list of unique categories present in this section */ -}}
+{{- $cats := slice }}
+{{- range $sectionPages }}
+  {{- range .Params.categories }}
+    {{- if not (in $cats .) }}
+      {{- $cats = $cats | append . }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- $cats = sort $cats }}
+
+{{- /* Build sorted list of unique cuisine tags (those with a flag) in this section */ -}}
+{{- $cuisines := slice }}
+{{- range $sectionPages }}
+  {{- range .Params.tags }}
+    {{- if and (index site.Data.flags .) (not (in $cuisines .)) }}
+      {{- $cuisines = $cuisines | append . }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- $cuisines = sort $cuisines }}
+
+<div class="index-layout">
+
+  <!-- Filter Bar -->
+  <aside class="recipe-filters" aria-label="{{ i18n "filter_aria_label" | default "Recipe filters" }}">
+    {{- if $cats }}
+    <div class="filter-section">
+      <h3 class="filter-section__title small-caps">{{ i18n "filter_course" | default "Course" }}</h3>
+      <div class="filter-list">
+        {{- range $cats }}
+        <label class="filter-item">
+          <input type="checkbox" class="filter-checkbox" name="course" value="{{ . | urlize }}">
+          <span class="filter-label">{{ . }}</span>
+        </label>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
+
+    {{- if $cuisines }}
+    <div class="filter-section">
+      <h3 class="filter-section__title small-caps">{{ i18n "filter_cuisine" | default "Cuisine" }}</h3>
+      <div class="filter-list">
+        {{- range $cuisines }}
+        <label class="filter-item">
+          <input type="checkbox" class="filter-checkbox" name="ethnicity" value="{{ . | urlize }}">
+          <span class="filter-label">{{ . }}</span>
+        </label>
+        {{- end }}
+      </div>
+    </div>
+    {{- end }}
+  </aside>
+
+  <!-- Grouped Grid Content -->
+  <div class="recipe-index">
+    {{- if $cats }}
+      {{- range $cats }}
+        {{- $catName := . }}
+        {{- $catPages := where $sectionPages "Params.categories" "intersect" (slice $catName) }}
+        {{- if $catPages }}
+        <div class="category-group" data-category="{{ $catName | urlize }}">
+          <h2 class="category-group__title">{{ $catName }}</h2>
+          <div class="recipe-grid recipe-grid--compact">
+            {{ range $catPages }}
+              {{ partial "recipe-card-compact.html" . }}
+            {{ end }}
+          </div>
+        </div>
+        {{- end }}
+      {{- end }}
+    {{- else if $sectionPages }}
+      <div class="recipe-grid recipe-grid--compact">
+        {{ range $sectionPages }}
+          {{ partial "recipe-card-compact.html" . }}
+        {{ end }}
+      </div>
+    {{- else }}
+      <p class="no-recipes">{{ i18n "no_recipes_found" | default "No recipes found." }}</p>
+    {{- end }}
+  </div>
+
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+{{ $filter := resources.Get "js/filter.js" | minify | fingerprint }}
+<script src="{{ $filter.RelPermalink }}"></script>
+{{ end }}

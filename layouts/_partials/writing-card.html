@@ -1,0 +1,19 @@
+<a href="{{ .RelPermalink }}" class="md3-card md3-card--writing">
+  {{- $imgName := or .Params.thumbnail .Params.banner }}
+  {{- with $imgName }}{{- with $.Resources.Get . }}
+  <div class="md3-card__media">
+    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+  </div>
+  {{- end }}{{- end }}
+  
+  <div class="md3-card__content">
+    {{- with .Params.categories }}
+    <p class="md3-card__overline small-caps">{{ index . 0 }}</p>
+    {{- end }}
+    <h3 class="md3-card__title">{{ .Title }}</h3>
+    {{- with .Description }}
+    <p class="md3-card__subtitle">{{ . | truncate 120 }}</p>
+    {{- end }}
+    <p class="md3-card__footer-text small-caps">{{ .Date.Format "January 2006" }}</p>
+  </div>
+</a>

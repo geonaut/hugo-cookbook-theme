@@ -1,0 +1,15 @@
+{{- /*
+  recipe-flag.html
+  Input: a slice of tag strings (pass .Params.tags)
+  Returns: dict{"emoji": "🇯🇵", "tag": "Japanese"}, or empty strings if no flag found.
+*/ -}}
+{{- $flags := site.Data.flags }}
+{{- $emoji := "" }}
+{{- $tag   := "" }}
+{{- range . }}
+  {{- if and (not $emoji) (index $flags .) }}
+    {{- $emoji = index $flags . }}
+    {{- $tag   = . }}
+  {{- end }}
+{{- end }}
+{{- return (dict "emoji" $emoji "tag" $tag) }}
