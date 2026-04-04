@@ -2,6 +2,9 @@
 exampleSite/public/
 exampleSite/resources/_gen/
 
+# Claude Code local session data
+.claude/
+
 # macOS
 .DS_Store
 
