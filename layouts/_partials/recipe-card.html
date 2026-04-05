@@ -5,7 +5,7 @@
 {{- $page     := .page }}
 {{- $hideTags := .hideTags | default false }}
 
-{{- $flag    := partial "recipe-flag.html" $page.Params.tags }}
+{{- $flag    := partialCached "recipe-flag.html" $page.Params.tags (delimit $page.Params.tags ",") }}
 {{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
 {{- $img     := "" }}
 {{- with $imgName }}{{- with $page.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}

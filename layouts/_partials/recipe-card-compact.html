@@ -3,7 +3,7 @@
   Compact card used in the section index. Carries data attributes for JS filtering.
   Usage: {{ partial "recipe-card-compact.html" . }}
 */ -}}
-{{- $flag     := partial "recipe-flag.html" .Params.tags }}
+{{- $flag     := partialCached "recipe-flag.html" .Params.tags (delimit .Params.tags ",") }}
 {{- $course   := index .Params.categories 0 }}
 
 <a href="{{ .RelPermalink }}"

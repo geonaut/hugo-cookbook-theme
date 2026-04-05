@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{- $flagData := partial "recipe-flag.html" .Params.tags }}
+{{- $flagData := partialCached "recipe-flag.html" .Params.tags (delimit .Params.tags ",") }}
 {{- $flag := $flagData.emoji }}
 {{- $flagTag := $flagData.tag }}
 {{- $page := . }}
