@@ -14,8 +14,16 @@
 <header class="recipe-header {{ if .Params.banner }}recipe-header--has-banner{{ end }}">
   {{- with .Params.banner }}
   {{- with $page.Resources.Get . }}
+  {{- $banner := . }}
+  {{- $sm := $banner }}{{- if gt $banner.Width 800 }}{{- $sm = $banner.Resize "800x" }}{{- end }}
+  {{- $lg := $banner }}{{- if gt $banner.Width 1400 }}{{- $lg = $banner.Resize "1400x" }}{{- end }}
   <div class="recipe-header__banner">
-    <img src="{{ .RelPermalink }}" alt="{{ $page.Title }}">
+    <img
+      src="{{ $sm.RelPermalink }}"
+      srcset="{{ $sm.RelPermalink }} 800w, {{ $lg.RelPermalink }} 1400w"
+      sizes="100vw"
+      alt="{{ $page.Title }}"
+      fetchpriority="high">
   </div>
   {{- end }}
   {{- end }}
@@ -36,7 +44,7 @@
         <span class="metadata-divider">|</span>
         {{- $dateMonth := .Date.Format "January" }}
         {{- $dateYear := .Date.Format "2006" }}
-        <time class="metadata-date" style="font-variant-numeric: lining-nums;" datetime="{{ .Date.Format "2006-01-02" }}">
+        <time class="metadata-date" datetime="{{ .Date.Format "2006-01-02" }}">
           <span class="small-caps">{{ $dateMonth }}</span> 
           <span class="metadata-date__year small-caps">{{ $dateYear }}</span>
         </time>

@@ -13,8 +13,15 @@
 
   {{- $imgName := or .Params.thumbnail .Params.banner }}
   {{- with $imgName }}{{- with $.Resources.Get . }}
+  {{- $sm := . }}{{- if gt .Width 400 }}{{- $sm = .Resize "400x" }}{{- end }}
+  {{- $md := . }}{{- if gt .Width 800 }}{{- $md = .Resize "800x" }}{{- end }}
   <div class="md3-card__media">
-    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+    <img
+      src="{{ $sm.RelPermalink }}"
+      srcset="{{ $sm.RelPermalink }} 400w, {{ $md.RelPermalink }} 800w"
+      sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 900px) calc(50vw - 2rem), 200px"
+      alt="{{ $.Title }}"
+      loading="lazy">
   </div>
   {{- end }}{{- end }}
 
