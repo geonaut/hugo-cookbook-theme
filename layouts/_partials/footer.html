@@ -4,26 +4,22 @@
     <span class="footer-copy">&copy; {{ now.Year }}</span>
   </div>
 
-  <nav class="footer-links" aria-label="{{ i18n "footer_links_label" | default "Footer links" }}">
-    <a href="https://gohugo.io" class="footer-link" rel="noopener" title="{{ i18n "footer_hugo" | default "Built with Hugo" }}">
-      <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
-      <span>{{ i18n "footer_hugo" | default "Hugo" }}</span>
-    </a>
-    <a href="https://github.com/geonaut/hugo-cookbook-theme" class="footer-link" rel="noopener" title="{{ i18n "footer_theme" | default "Theme source" }}">
-      <span class="material-symbols-outlined" aria-hidden="true">brush</span>
-      <span>{{ i18n "footer_theme" | default "Theme" }}</span>
-    </a>
-    {{- with site.Params.instagram }}
-    <a href="{{ . }}" class="footer-link" rel="noopener" title="{{ i18n "footer_instagram" | default "Instagram" }}">
-      <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
-      <span>{{ i18n "footer_instagram" | default "Instagram" }}</span>
-    </a>
-    {{- end }}
+  <p class="footer-attribution">
+    Built with <a href="https://gohugo.io" rel="noopener" class="footer-attr-link">Hugo</a>
+    using <a href="https://github.com/geonaut/hugo-cookbook-theme" rel="noopener" class="footer-attr-link">cookbook-theme</a>
+    <span class="footer-attr-sep">|</span> Build:
     {{- with site.Params.buildCommit }}
-    <a href="{{ site.Params.githubRepo }}/commit/{{ . }}" class="footer-link footer-link--commit" rel="noopener" title="{{ i18n "footer_commit" | default "View source commit" }}">
-      <span class="material-symbols-outlined" aria-hidden="true">tag</span>
-      <span>{{ slicestr . 0 7 }}</span>
+    <a href="{{ site.Params.githubRepo }}/commit/{{ . }}" rel="noopener" class="footer-attr-link footer-attr-link--mono">{{ slicestr . 0 7 }}</a>
+    {{- else }}
+    <span class="footer-attr-link--mono footer-attr-placeholder">local</span>
+    {{- end }}
+  </p>
+
+  <div class="footer-social">
+    {{- with site.Params.instagram }}
+    <a href="{{ . }}" class="footer-link footer-link--icon" rel="noopener" title="{{ i18n "footer_instagram" | default "Instagram" }}" aria-label="{{ i18n "footer_instagram" | default "Instagram" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
     </a>
     {{- end }}
-  </nav>
+  </div>
 </div>

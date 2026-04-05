@@ -35,9 +35,4 @@ Esta é a receita definitiva para o pão de queijo brasileiro perfeito. Originá
 - Pellentesque in ipsum id orci porta dapibus. Donec sollicitudin molestie malesuada.
 {{< /hints >}}
 {{< gallery layout="horizontal" >}}
-gallery_1.jpg
-gallery_2.jpg
-gallery_3.jpg
-gallery_4.jpg
-{{< /gallery >}}
 {{< /recipe-grid >}}

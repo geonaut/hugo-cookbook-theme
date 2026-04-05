@@ -2,9 +2,6 @@ baseURL = "https://example.com/"
 languageCode = "en-US"
 title = "Geonaut's Cookbook"
 
-[outputs]
-  page = ["HTML", "print"]
-
 [outputFormats.print]
   name = "print"
   baseName = "index"
@@ -13,25 +10,29 @@ title = "Geonaut's Cookbook"
   path = "print"
 
 [params]
-  homeEyebrow = "Welcome to"
-  description  = "A collection of recipes from around the world."
+  homeEyebrow    = "Welcome to"
+  description    = "A collection of recipes from around the world."
+  instagram      = "https://www.instagram.com/example"
+  githubRepo     = "https://github.com/example/cookbook"
+  buildCommit    = ""  # set via HUGO_PARAMS_BUILDCOMMIT at deploy time
+
   [params.colors]
-    primary = "#1b4332" # A deeper green
-    tertiary = "#9d0208" # A deep red
+    primary  = "#1b4332"
+    tertiary = "#9d0208"
 
   [[params.utilityCards]]
-    title = "PDF Cookbook"
+    title       = "PDF Cookbook"
     description = "Download the entire collection as a printable, bookmarked PDF."
-    url = "/pdf-cookbook"
-    icon = "picture_as_pdf"
-    color = "primary"
+    url         = "/pdf-cookbook"
+    icon        = "picture_as_pdf"
+    color       = "primary"
 
   [[params.utilityCards]]
-    title = "Foodie Map"
+    title       = "Foodie Map"
     description = "An interactive map of my favorite local markets and hidden gems."
-    url = "/map"
-    icon = "location_on"
-    color = "tertiary"
+    url         = "/map"
+    icon        = "location_on"
+    color       = "tertiary"
 
 [menus]
   [[menus.main]]
@@ -55,7 +56,6 @@ title = "Geonaut's Cookbook"
     [menus.main.params]
       icon = "edit_note"
 
-
   [[menus.main]]
     name    = "About"
     pageRef = "/about"
@@ -69,6 +69,16 @@ title = "Geonaut's Cookbook"
     weight  = 50
     [menus.main.params]
       icon = "mail"
+
+[[cascade]]
+  [cascade.target]
+    path = "/map"
+  layout = "fullwidth"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [module]
   [[module.imports]]
