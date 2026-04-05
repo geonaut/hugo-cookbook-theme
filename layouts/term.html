@@ -6,7 +6,11 @@
 
 <div class="recipe-grid">
   {{- range .Pages }}
+  {{- if eq .Section "writing" }}
+  {{ partial "writing-card.html" . }}
+  {{- else }}
   {{ partial "recipe-card.html" (dict "page" .) }}
+  {{- end }}
   {{- end }}
 </div>
 {{ end }}

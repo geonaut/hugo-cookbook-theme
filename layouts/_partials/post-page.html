@@ -1,0 +1,57 @@
+{{- $flags := site.Data.flags }}
+{{- $page := . }}
+<nav class="breadcrumb small-caps" aria-label="{{ i18n "breadcrumb_label" | default "Breadcrumbs" }}">
+  {{ range .Ancestors.Reverse }}
+  <a href="{{ .RelPermalink }}">{{ if .IsHome }}{{ i18n "breadcrumb_home" | default "Home" }}{{ else }}{{ .Title }}{{ end }}</a>
+  <span class="breadcrumb__divider">/</span>
+  {{ end }}
+  <span class="breadcrumb__current">{{ .Title }}</span>
+</nav>
+
+<article class="post-article">
+  <div class="page-hero">
+    {{- with .Params.categories }}
+    <p class="page-hero__eyebrow">{{ delimit . " · " }}</p>
+    {{- end }}
+    <h1 class="page-hero__title">{{ .Title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
+    </p>
+    {{- with .Description }}
+    <p class="page-hero__subtitle">{{ . }}</p>
+    {{- end }}
+  </div>
+
+  <hr class="post-divider">
+
+  <div class="post-layout{{ if .Params.sidebar_gallery }} post-layout--with-sidebar{{ end }}">
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+    {{- with .Params.sidebar_gallery }}
+    <aside class="post-gallery-sidebar">
+      <div class="recipe-gallery recipe-gallery--vertical">
+        {{- range . }}
+        {{- with $page.Resources.Get . }}
+        <a href="{{ .RelPermalink }}">
+          <img src="{{ .RelPermalink }}" alt="" loading="lazy">
+        </a>
+        {{- end }}
+        {{- end }}
+      </div>
+    </aside>
+    {{- end }}
+  </div>
+
+  {{- with .Params.tags }}
+  <ul class="chip-list" aria-label="{{ i18n "tags_label" | default "Tags" }}">
+    {{- range . }}
+    {{- $tag := . }}
+    <li><a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="chip">
+      {{- with index $flags $tag }}<span aria-hidden="true">{{ . }}</span> {{ end }}
+      {{- $tag }}
+    </a></li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</article>
