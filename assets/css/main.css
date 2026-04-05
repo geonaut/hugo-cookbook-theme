@@ -1410,18 +1410,18 @@ footer .content-wrapper {
   max-width: 72ch;
 }
 
-.post-content:has(.columns) {
+.post-content:has(.breakout) {
   max-width: none;
 }
 
-.post-content:has(.columns) > p,
-.post-content:has(.columns) > h1,
-.post-content:has(.columns) > h2,
-.post-content:has(.columns) > h3,
-.post-content:has(.columns) > h4,
-.post-content:has(.columns) > ul,
-.post-content:has(.columns) > ol,
-.post-content:has(.columns) > blockquote {
+.post-content:has(.breakout) > p,
+.post-content:has(.breakout) > h1,
+.post-content:has(.breakout) > h2,
+.post-content:has(.breakout) > h3,
+.post-content:has(.breakout) > h4,
+.post-content:has(.breakout) > ul,
+.post-content:has(.breakout) > ol,
+.post-content:has(.breakout) > blockquote {
   max-width: 72ch;
 }
 
@@ -1870,6 +1870,7 @@ footer .content-wrapper {
 }
 
 /* ── Columns layout ────────────────────────────────────────── */
+/* Breakpoints: sm=640px  md=768px  lg=900px */
 .columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1878,8 +1879,13 @@ footer .content-wrapper {
   margin-block: 1.5rem;
 }
 
+.columns--3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 @media (max-width: 640px) {
-  .columns {
+  .columns,
+  .columns--3 {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
