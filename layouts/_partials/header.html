@@ -75,5 +75,31 @@
       {{- end }}
     </ul>
     {{- end }}
+
+    <button class="nav-hamburger" aria-label="{{ i18n "nav_open" | default "Open navigation" }}" aria-expanded="false" aria-controls="mobile-nav">
+      <span class="material-symbols-outlined" aria-hidden="true">menu</span>
+    </button>
   </div>
 </nav>
+
+{{- /* ── Mobile nav drawer ── */ -}}
+<div id="mobile-nav" class="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav__header">
+    <span class="mobile-nav__title">{{ site.Title }}</span>
+    <button class="mobile-nav__close" aria-label="{{ i18n "nav_close" | default "Close navigation" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">close</span>
+    </button>
+  </div>
+  <nav class="mobile-nav__links">
+    {{- $currentPage := . }}
+    {{- range site.Menus.main }}
+    <a href="{{ .URL }}" class="mobile-nav__item"
+      {{- if $currentPage.IsMenuCurrent "main" . }} aria-current="page"{{ end }}>
+      {{- with .Params.icon }}<span class="material-symbols-outlined" aria-hidden="true">{{ . }}</span>{{ end }}
+      {{- .Name }}
+    </a>
+    {{- end }}
+  </nav>
+</div>
+<div class="mobile-nav__backdrop" aria-hidden="true"></div>
+

@@ -1,19 +1,79 @@
-// Cookbook theme
+// Cookbook theme — main.js
 
-// ── Active nav link ──────────────────────────────────────────
-document.querySelectorAll('.top-app-bar__nav > li > a').forEach(link => {
-  if (link.pathname === window.location.pathname ||
-      (link.pathname !== '/' && window.location.pathname.startsWith(link.pathname))) {
-    link.setAttribute('aria-current', 'page');
+// ── Scroll lock ──────────────────────────────────────────────
+// Reference-counted so lightbox and mobile nav don't fight each other.
+var _scrollLocks = 0;
+function lockScroll() {
+  if (++_scrollLocks === 1) document.body.style.overflow = 'hidden';
+}
+function unlockScroll() {
+  if (--_scrollLocks <= 0) { _scrollLocks = 0; document.body.style.overflow = ''; }
+}
+
+// ── Focus trap ───────────────────────────────────────────────
+// Returns { activate, deactivate } for a given container element.
+function makeFocusTrap(el) {
+  var FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  function nodes() { return Array.from(el.querySelectorAll(FOCUSABLE)); }
+  function handler(e) {
+    if (e.key !== 'Tab') return;
+    var list = nodes();
+    if (!list.length) return;
+    var idx = list.indexOf(document.activeElement);
+    if (e.shiftKey) {
+      if (idx <= 0) { e.preventDefault(); list[list.length - 1].focus(); }
+    } else {
+      if (idx === list.length - 1) { e.preventDefault(); list[0].focus(); }
+    }
   }
-});
+  return {
+    activate:   function () { el.addEventListener('keydown', handler); var list = nodes(); if (list.length) list[0].focus(); },
+    deactivate: function () { el.removeEventListener('keydown', handler); }
+  };
+}
+
+// ── Mobile nav ───────────────────────────────────────────────
+(function () {
+  var btn      = document.querySelector('.nav-hamburger');
+  var nav      = document.getElementById('mobile-nav');
+  var backdrop = document.querySelector('.mobile-nav__backdrop');
+  var closeBtn = document.querySelector('.mobile-nav__close');
+  if (!btn || !nav) return;
+
+  var trap = makeFocusTrap(nav);
+
+  function openNav() {
+    nav.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    nav.removeAttribute('aria-hidden');
+    lockScroll();
+    trap.activate();
+  }
+
+  function closeNav() {
+    nav.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    nav.setAttribute('aria-hidden', 'true');
+    unlockScroll();
+    trap.deactivate();
+    btn.focus();
+  }
+
+  btn.addEventListener('click', openNav);
+  closeBtn.addEventListener('click', closeNav);
+  backdrop.addEventListener('click', closeNav);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && nav.classList.contains('is-open')) closeNav();
+  });
+}());
 
 // ── Gallery lightbox ─────────────────────────────────────────
 (function () {
   const galleries = document.querySelectorAll('.recipe-gallery');
   if (!galleries.length) return;
 
-  // Build overlay once
   const overlay = document.createElement('div');
   overlay.className = 'lb-overlay';
   overlay.setAttribute('role', 'dialog');
@@ -34,14 +94,14 @@ document.querySelectorAll('.top-app-bar__nav > li > a').forEach(link => {
   document.body.appendChild(overlay);
   overlay.style.display = 'none';
 
-  const lb        = overlay.querySelector('.lb');
-  const img       = overlay.querySelector('.lb__img');
-  const counter   = overlay.querySelector('.lb__counter');
-  const btnClose  = overlay.querySelector('.lb__close');
-  const btnPrev   = overlay.querySelector('.lb__prev');
-  const btnNext   = overlay.querySelector('.lb__next');
+  const lb       = overlay.querySelector('.lb');
+  const img      = overlay.querySelector('.lb__img');
+  const counter  = overlay.querySelector('.lb__counter');
+  const btnClose = overlay.querySelector('.lb__close');
+  const btnPrev  = overlay.querySelector('.lb__prev');
+  const btnNext  = overlay.querySelector('.lb__next');
 
-  let images = [];
+  let images  = [];
   let current = 0;
 
   function show(idx) {
@@ -62,26 +122,21 @@ document.querySelectorAll('.top-app-bar__nav > li > a').forEach(link => {
     overlay.classList.add('lb-visible');
     overlay.style.display = 'flex';
     lb.focus();
-    document.body.style.overflow = 'hidden';
+    lockScroll();
   }
 
   function close() {
     overlay.classList.remove('lb-visible');
-    document.body.style.overflow = '';
-    // wait for fade before hiding
+    unlockScroll();
     overlay.addEventListener('transitionend', () => {
       overlay.style.display = 'none';
     }, { once: true });
   }
 
-  // Wire up each gallery
   galleries.forEach(gallery => {
     const links = gallery.querySelectorAll('a');
     links.forEach((link, idx) => {
-      link.addEventListener('click', e => {
-        e.preventDefault();
-        open(links, idx);
-      });
+      link.addEventListener('click', e => { e.preventDefault(); open(links, idx); });
     });
   });
 
@@ -89,16 +144,12 @@ document.querySelectorAll('.top-app-bar__nav > li > a').forEach(link => {
   btnPrev.addEventListener('click', () => show(current - 1));
   btnNext.addEventListener('click', () => show(current + 1));
 
-  // Click outside the lightbox panel to close
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) close();
-  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 
-  // Keyboard
   document.addEventListener('keydown', e => {
     if (!overlay.classList.contains('lb-visible')) return;
-    if (e.key === 'Escape')      close();
-    if (e.key === 'ArrowLeft')   show(current - 1);
-    if (e.key === 'ArrowRight')  show(current + 1);
+    if (e.key === 'Escape')    close();
+    if (e.key === 'ArrowLeft') show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
   });
-})();
+}());
