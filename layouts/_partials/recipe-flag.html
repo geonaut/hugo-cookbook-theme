@@ -3,7 +3,7 @@
   Input: a slice of tag strings (pass .Params.tags)
   Returns: dict{"emoji": "🇯🇵", "tag": "Japanese"}, or empty strings if no flag found.
 */ -}}
-{{- $flags := site.Data.flags }}
+{{- $flags := hugo.Data.flags }}
 {{- $emoji := "" }}
 {{- $tag   := "" }}
 {{- range . }}

@@ -1,4 +1,4 @@
-{{- $flags := site.Data.flags }}
+{{- $flags := hugo.Data.flags }}
 {{- $imgName := or .Params.thumbnail .Params.banner }}
 {{- $img := "" }}
 {{- with $imgName }}{{- with $.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}

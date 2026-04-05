@@ -728,6 +728,7 @@ footer .content-wrapper {
   z-index: 2;
   width: 100%;
   padding: 2rem 0;
+  text-align: left;
 }
 
 .recipe-header .page-hero {
@@ -761,11 +762,11 @@ footer .content-wrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.25rem; /* Increased margin above header banner */
-  font-size: var(--md-sys-typescale-label-large-size); /* Increased for better legibility */
+  margin-bottom: 1.25rem;
+  font-size: var(--md-sys-typescale-label-large-size);
   color: var(--md-sys-color-on-surface-variant);
-  opacity: 1; /* Maximum contrast */
   font-weight: 500;
+  text-align: left;
 }
 
 .breadcrumb a {
@@ -1374,6 +1375,13 @@ footer .content-wrapper {
   max-width: 72ch;
 }
 
+.post-content h2,
+.post-content h3,
+.post-content h4 {
+  text-align: left;
+  border-bottom: none;
+}
+
 .post-content h2 {
   font-size: var(--md-sys-typescale-headline-small-size);
   line-height: var(--md-sys-typescale-headline-small-line);
@@ -1386,6 +1394,12 @@ footer .content-wrapper {
   font-size: var(--md-sys-typescale-title-large-size);
   font-weight: 500;
   margin: 1.5rem 0 0.75rem;
+}
+
+.post-content h4 {
+  font-size: var(--md-sys-typescale-title-medium-size);
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
 }
 
 .post-content p {

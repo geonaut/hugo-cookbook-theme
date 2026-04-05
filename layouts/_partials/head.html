@@ -16,7 +16,7 @@
   Set params.fonts.selfHosted = true to skip Google Fonts loading entirely.
 */ -}}
 {{- $paletteName := site.Params.palette | default "forest" }}
-{{- $palette     := index site.Data.palettes $paletteName }}
+{{- $palette     := index hugo.Data.palettes $paletteName }}
 {{- $fontSans    := site.Params.fonts.sans  | default "Inter" }}
 {{- $fontSerif   := site.Params.fonts.serif | default "Lora" }}
 {{- $primaryOverride   := site.Params.colors.primary }}

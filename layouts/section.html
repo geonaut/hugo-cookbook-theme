@@ -22,7 +22,7 @@
 {{- $cuisines := slice }}
 {{- range $sectionPages }}
   {{- range .Params.tags }}
-    {{- if and (index site.Data.flags .) (not (in $cuisines .)) }}
+    {{- if and (index hugo.Data.flags .) (not (in $cuisines .)) }}
       {{- $cuisines = $cuisines | append . }}
     {{- end }}
   {{- end }}

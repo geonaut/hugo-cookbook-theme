@@ -1,4 +1,4 @@
-{{- $flags := site.Data.flags }}
+{{- $flags := hugo.Data.flags }}
 {{- $page := . }}
 <nav class="breadcrumb small-caps" aria-label="{{ i18n "breadcrumb_label" | default "Breadcrumbs" }}">
   {{ range .Ancestors.Reverse }}
@@ -39,8 +39,6 @@
     <p class="page-hero__subtitle">{{ . }}</p>
     {{- end }}
   </div>
-
-  <hr class="post-divider">
 
   <div class="post-layout{{ if .Params.sidebar_gallery }} post-layout--with-sidebar{{ end }}">
     <div class="post-content">
