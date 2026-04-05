@@ -10,13 +10,31 @@
 
 <article class="post-article">
   <div class="page-hero">
-    {{- with .Params.categories }}
-    <p class="page-hero__eyebrow">{{ delimit . " · " }}</p>
-    {{- end }}
     <h1 class="page-hero__title">{{ .Title }}</h1>
-    <p class="post-meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2 January 2006" }}</time>
-    </p>
+
+    <div class="page-hero__metadata">
+      <div class="metadata-line-1">
+        <time class="metadata-date" datetime="{{ .Date.Format "2006-01-02" }}">
+          <span class="small-caps">{{ .Date.Format "January" }}</span>
+          <span class="metadata-date__year small-caps">{{ .Date.Format "2006" }}</span>
+        </time>
+      </div>
+
+      {{- with .Params.tags }}
+      <div class="metadata-line-2">
+        <ul class="chip-list chip-list--small" aria-label="{{ i18n "tags_label" | default "Tags" }}">
+          {{- range . }}
+          {{- $tag := . }}
+          <li><a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="chip chip--small">
+            {{- with index $flags $tag }}<span aria-hidden="true">{{ . }}</span> {{ end }}
+            {{- $tag }}
+          </a></li>
+          {{- end }}
+        </ul>
+      </div>
+      {{- end }}
+    </div>
+
     {{- with .Description }}
     <p class="page-hero__subtitle">{{ . }}</p>
     {{- end }}
@@ -42,16 +60,4 @@
     </aside>
     {{- end }}
   </div>
-
-  {{- with .Params.tags }}
-  <ul class="chip-list" aria-label="{{ i18n "tags_label" | default "Tags" }}">
-    {{- range . }}
-    {{- $tag := . }}
-    <li><a href="{{ "/tags/" | relURL }}{{ $tag | urlize }}" class="chip">
-      {{- with index $flags $tag }}<span aria-hidden="true">{{ . }}</span> {{ end }}
-      {{- $tag }}
-    </a></li>
-    {{- end }}
-  </ul>
-  {{- end }}
 </article>

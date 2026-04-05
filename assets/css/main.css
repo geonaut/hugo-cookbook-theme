@@ -1380,9 +1380,6 @@ footer .content-wrapper {
   font-weight: 600;
   color: var(--md-sys-color-on-background);
   margin: 2rem 0 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  /* Inherits var(--font-serif) from html */
 }
 
 .post-content h3 {
