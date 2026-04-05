@@ -65,9 +65,10 @@
       {{- /* ── Plain item ── */ -}}
       <li class="nav-item">
         <a href="{{ $item.URL }}"
-          {{- if $currentPage.IsMenuCurrent "main" $item }} aria-current="page"{{ end }}>
+          {{- if $currentPage.IsMenuCurrent "main" $item }} aria-current="page"{{ end }}
+          {{- if $item.Params.iconOnly }} aria-label="{{ $item.Name }}" title="{{ $item.Name }}"{{ end }}>
           {{- with $item.Params.icon }}<span class="material-symbols-outlined" aria-hidden="true">{{ . }}</span>{{ end }}
-          {{- $item.Name }}
+          {{- if not $item.Params.iconOnly }}{{ $item.Name }}{{ end }}
         </a>
       </li>
       {{- end }}
