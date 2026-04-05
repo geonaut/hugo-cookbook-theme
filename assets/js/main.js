@@ -153,3 +153,53 @@ function makeFocusTrap(el) {
     if (e.key === 'ArrowRight') show(current + 1);
   });
 }());
+
+// ── Carousel ─────────────────────────────────────────────────
+(function () {
+  var track   = document.querySelector('.carousel-track');
+  var prevBtn = document.querySelector('.carousel-btn--prev');
+  var nextBtn = document.querySelector('.carousel-btn--next');
+  if (!track || !prevBtn || !nextBtn) return;
+
+  function updateButtons() {
+    var scrollLeft = track.scrollLeft;
+    var maxScroll  = track.scrollWidth - track.clientWidth;
+    prevBtn.disabled = scrollLeft <= 5;
+    nextBtn.disabled = scrollLeft >= maxScroll - 5;
+  }
+
+  nextBtn.addEventListener('click', function () {
+    track.scrollBy({ left: track.clientWidth * 0.75, behavior: 'smooth' });
+  });
+  prevBtn.addEventListener('click', function () {
+    track.scrollBy({ left: -track.clientWidth * 0.75, behavior: 'smooth' });
+  });
+  track.addEventListener('scroll', updateButtons, { passive: true });
+  window.addEventListener('resize', updateButtons);
+  updateButtons();
+}());
+
+// ── Recipe filter ────────────────────────────────────────────
+(function () {
+  var checkboxes = document.querySelectorAll('.filter-checkbox');
+  if (!checkboxes.length) return;
+
+  function filter() {
+    var activeCourses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(function (cb) { return cb.value; });
+    var activeEths    = Array.from(document.querySelectorAll('input[name="ethnicity"]:checked')).map(function (cb) { return cb.value; });
+
+    document.querySelectorAll('.category-group').forEach(function (cat) {
+      var hasVisible = false;
+      cat.querySelectorAll('.recipe-item').forEach(function (item) {
+        var courseMatch = !activeCourses.length || activeCourses.includes(item.dataset.course);
+        var ethMatch    = !activeEths.length    || activeEths.includes(item.dataset.ethnicity);
+        var show        = courseMatch && ethMatch;
+        item.style.display = show ? 'flex' : 'none';
+        if (show) hasVisible = true;
+      });
+      cat.style.display = hasVisible ? 'block' : 'none';
+    });
+  }
+
+  checkboxes.forEach(function (cb) { cb.addEventListener('change', filter); });
+}());
