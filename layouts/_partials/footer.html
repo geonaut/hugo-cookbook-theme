@@ -1,4 +1,29 @@
-<div class="content-wrapper">
-  <span>{{ site.Title }}</span>
-  <span>{{ now.Year }} &mdash; Built with <a href="https://gohugo.io">Hugo</a></span>
+<div class="content-wrapper footer-content">
+  <div class="footer-brand">
+    <span class="footer-title">{{ site.Title }}</span>
+    <span class="footer-copy">&copy; {{ now.Year }}</span>
+  </div>
+
+  <nav class="footer-links" aria-label="{{ i18n "footer_links_label" | default "Footer links" }}">
+    <a href="https://gohugo.io" class="footer-link" rel="noopener" title="{{ i18n "footer_hugo" | default "Built with Hugo" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">rocket_launch</span>
+      <span>{{ i18n "footer_hugo" | default "Hugo" }}</span>
+    </a>
+    <a href="https://github.com/geonaut/hugo-cookbook-theme" class="footer-link" rel="noopener" title="{{ i18n "footer_theme" | default "Theme source" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">brush</span>
+      <span>{{ i18n "footer_theme" | default "Theme" }}</span>
+    </a>
+    {{- with site.Params.instagram }}
+    <a href="{{ . }}" class="footer-link" rel="noopener" title="{{ i18n "footer_instagram" | default "Instagram" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">photo_camera</span>
+      <span>{{ i18n "footer_instagram" | default "Instagram" }}</span>
+    </a>
+    {{- end }}
+    {{- with site.Params.buildCommit }}
+    <a href="{{ site.Params.githubRepo }}/commit/{{ . }}" class="footer-link footer-link--commit" rel="noopener" title="{{ i18n "footer_commit" | default "View source commit" }}">
+      <span class="material-symbols-outlined" aria-hidden="true">tag</span>
+      <span>{{ slicestr . 0 7 }}</span>
+    </a>
+    {{- end }}
+  </nav>
 </div>

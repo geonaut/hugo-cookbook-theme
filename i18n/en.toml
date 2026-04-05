@@ -53,3 +53,24 @@ other = "Next"
 
 [nav_label]
 other = "Main navigation"
+
+[nav_open]
+other = "Open navigation"
+
+[nav_close]
+other = "Close navigation"
+
+[footer_links_label]
+other = "Footer links"
+
+[footer_hugo]
+other = "Hugo"
+
+[footer_theme]
+other = "Theme"
+
+[footer_instagram]
+other = "Instagram"
+
+[footer_commit]
+other = "View source commit"

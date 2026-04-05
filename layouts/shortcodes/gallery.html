@@ -1,15 +1,17 @@
+{{- /*
+  gallery shortcode — reads image filenames from the page's `gallery` front matter param.
+  Usage: {{< gallery >}} or {{< gallery layout="horizontal" >}}
+  Images are listed in front matter as: gallery: ["img1.jpg", "img2.jpg"]
+*/ -}}
 {{- $page   := .Page }}
 {{- $layout := default "vertical" (.Get "layout") }}
-{{- $images := split (strings.TrimSpace .Inner) "\n" }}
+{{- $names  := .Page.Params.gallery }}
 <div class="recipe-gallery recipe-gallery--{{ $layout }}">
-  {{- range $images }}
-  {{- $name := strings.Trim . "\r " }}
-  {{- if $name }}
-  {{- with $page.Resources.Get $name }}
+  {{- range $names }}
+  {{- with $page.Resources.Get . }}
   <a href="{{ .RelPermalink }}">
     <img src="{{ .RelPermalink }}" alt="" loading="lazy">
   </a>
-  {{- end }}
   {{- end }}
   {{- end }}
 </div>

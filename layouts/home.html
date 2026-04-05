@@ -17,9 +17,7 @@
   <section class="home-section carousel-section">
     <div class="section-header">
       <h2 class="section-header__title">{{ i18n "home_featured_recipes" | default "Featured Recipes" }}</h2>
-      <div class="carousel-controls-legacy">
-        <a href="{{ $recipesSection | relURL }}" class="section-header__link">{{ i18n "home_see_all" | default "See all →" }}</a>
-      </div>
+      <a href="{{ $recipesSection | relURL }}" class="section-header__link">{{ i18n "home_see_all" | default "See all →" }}</a>
     </div>
     <div class="carousel-container">
       <button class="carousel-btn carousel-btn--prev" aria-label="{{ i18n "carousel_prev" | default "Previous" }}" disabled>
