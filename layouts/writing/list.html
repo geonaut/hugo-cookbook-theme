@@ -5,9 +5,40 @@
   {{- with .Content }}<div class="post-content">{{ . }}</div>{{ end }}
 </div>
 
+{{- /* Collect unique categories in chronological order of first appearance */ -}}
+{{- $cats := slice }}
+{{- range .Pages.ByDate.Reverse }}
+  {{- range .Params.categories }}
+    {{- if not (in $cats .) }}{{ $cats = $cats | append . }}{{ end }}
+  {{- end }}
+{{- end }}
+
+{{- if gt (len $cats) 1 }}
+<nav class="cat-chips" aria-label="Jump to category">
+  {{- range $cats }}
+  <a class="chip" href="#cat-{{ . | urlize }}">{{ . }}</a>
+  {{- end }}
+</nav>
+{{- end }}
+
 <div class="post-list">
-  {{- range .Pages.ByDate.Reverse }}
-  {{ partial "post-card.html" . }}
+  {{- if gt (len $cats) 1 }}
+    {{- range $cats }}
+      {{- $catName := . }}
+      {{- $catPages := where $.Pages "Params.categories" "intersect" (slice $catName) }}
+      {{- if $catPages }}
+      <div id="cat-{{ $catName | urlize }}">
+        <h2 class="category-group__title">{{ $catName }}</h2>
+        {{- range $catPages.ByDate.Reverse }}
+        {{ partial "post-card.html" . }}
+        {{- end }}
+      </div>
+      {{- end }}
+    {{- end }}
+  {{- else }}
+    {{- range .Pages.ByDate.Reverse }}
+    {{ partial "post-card.html" . }}
+    {{- end }}
   {{- end }}
 </div>
 {{ end }}

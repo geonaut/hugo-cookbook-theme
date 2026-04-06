@@ -46,14 +46,17 @@
 /* ── Reset & Base ──────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body {
+  overflow-x: clip; /* Prevent horizontal overflow expanding mobile viewport */
+}
+
 html {
-  font-family: var(--font-serif); /* Switch to Serif Global Base */
+  font-family: var(--font-serif);
   font-size: var(--md-sys-typescale-body-large-size);
-  line-height: 1.6; /* Increased for Serif readability */
+  line-height: 1.6;
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip; /* Prevent horizontal overflow expanding mobile viewport */
 }
 
 img, video { max-width: 100%; height: auto; display: block; }
@@ -651,9 +654,21 @@ footer .content-wrapper {
   margin-top: 2rem;
 }
 
+/* All direct children must honour grid cell width — fixes iOS Safari
+   overflow from sticky sidebar pushing layout wider than viewport */
+.index-layout > * {
+  min-width: 0;
+}
+
 @media (max-width: 768px) {
   .index-layout {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Hide sidebar on mobile — replaced by .cat-chips scroll bar */
+  .recipe-filters {
+    display: none;
   }
 }
 
@@ -664,6 +679,25 @@ footer .content-wrapper {
   position: sticky;
   top: 80px;
   height: fit-content;
+}
+
+/* ── Category chip scroll bar (mobile index nav) ──────────────── */
+.cat-chips {
+  display: none; /* shown only on mobile */
+}
+
+@media (max-width: 768px) {
+  .cat-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.25rem;
+    margin-top: 1.5rem;
+  }
+  .cat-chips::-webkit-scrollbar { display: none; }
+  .cat-chips .chip { white-space: nowrap; flex-shrink: 0; }
 }
 
 .filter-section {
@@ -1491,7 +1525,7 @@ footer .content-wrapper {
 
 @media (min-width: 600px) {
   .post-card {
-    grid-template-columns: 220px 1fr;
+    grid-template-columns: 160px 1fr;
   }
 }
 
@@ -1530,8 +1564,8 @@ footer .content-wrapper {
 }
 
 .post-card__title {
-  font-size: var(--md-sys-typescale-title-large-size);
-  line-height: var(--md-sys-typescale-title-large-line);
+  font-size: var(--md-sys-typescale-title-medium-size);
+  line-height: var(--md-sys-typescale-title-medium-line);
   font-weight: 500;
   color: var(--md-sys-color-on-surface);
 }
@@ -1540,6 +1574,10 @@ footer .content-wrapper {
   font-size: var(--md-sys-typescale-body-medium-size);
   color: var(--md-sys-color-on-surface-variant);
   flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .post-card__tags {
