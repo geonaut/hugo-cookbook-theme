@@ -38,17 +38,13 @@
           <div class="nav-dropdown__sections">
             {{- range $subsections }}
             {{- $section := . }}
-            {{- $recipes := $section.Pages }}
-            {{- if $recipes }}
+            {{- $navRecipes := where $section.Pages "Params.nav" true }}
+            {{- $showRecipes := cond (gt (len $navRecipes) 0) $navRecipes (first 5 $section.Pages) }}
+            {{- if $showRecipes }}
             <div class="nav-dropdown__group">
               <p class="nav-dropdown__group-title">{{ $section.Title }}</p>
-              {{- range first 5 $recipes }}
+              {{- range $showRecipes }}
               <a href="{{ .RelPermalink }}" class="nav-dropdown__item" role="menuitem">{{ .Title }}</a>
-              {{- end }}
-              {{- if gt (len $recipes) 5 }}
-              <a href="{{ $section.RelPermalink }}" class="nav-dropdown__more" role="menuitem">
-                {{ i18n "nav_more_items" | default "More" }} {{ $section.Title }}…
-              </a>
               {{- end }}
             </div>
             {{- end }}
