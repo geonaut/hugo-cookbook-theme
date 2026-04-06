@@ -47,7 +47,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
-  overflow-x: clip; /* Prevent horizontal overflow expanding mobile viewport */
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-text-size-adjust: 100%;
 }
 
 html {
@@ -125,6 +128,10 @@ header {
   color: var(--md-sys-color-on-surface);
   text-decoration: none;
   flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .top-app-bar__headline:hover { text-decoration: none; }
@@ -159,6 +166,7 @@ header {
 
 /* ── Main content ──────────────────────────────────────────── */
 main {
+  overflow-x: clip;
   padding: 2rem 0 4rem;
 }
 
@@ -463,6 +471,11 @@ footer .content-wrapper {
   margin-top: 1rem;
 }
 
+.recipe-grid > *,
+.utility-grid > * {
+  min-width: 0;
+}
+
 .recipe-grid--compact {
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1rem;
@@ -544,6 +557,30 @@ footer .content-wrapper {
   position: relative; /* Context for absolute buttons */
 }
 
+@media (max-width: 768px) {
+  .carousel-container {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .carousel-track {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+
+  .carousel-track > * {
+    flex: none;
+    max-width: 100%;
+  }
+
+  .carousel-btn {
+    display: none !important;
+  }
+}
+
 .carousel-btn {
   position: absolute;
   top: 0;
@@ -591,8 +628,8 @@ footer .content-wrapper {
 
 
 .carousel-track {
-  display: flex !important; /* Force flex for carousel */
-  flex-wrap: nowrap !important;
+  display: flex;
+  flex-wrap: nowrap;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
@@ -618,6 +655,10 @@ footer .content-wrapper {
   flex-direction: column;
   gap: 4rem;
   margin-top: 2rem;
+}
+
+.home-section {
+  min-width: 0;
 }
 
 .section-header {
@@ -863,10 +904,11 @@ footer .content-wrapper {
 
 
 .page-hero__title {
-  font-size: var(--md-sys-typescale-display-medium-size);
-  line-height: var(--md-sys-typescale-display-medium-line);
+  font-size: clamp(26px, 8vw, var(--md-sys-typescale-display-medium-size));
+  line-height: 1.15;
   font-weight: 400;
   color: var(--md-sys-color-on-background);
+  overflow-wrap: break-word;
 }
 
 .page-hero__subtitle {
@@ -1787,7 +1829,7 @@ footer .content-wrapper {
   background-color: var(--md-sys-color-surface-container-high);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   header {
     position: static;
   }
@@ -1801,13 +1843,11 @@ footer .content-wrapper {
   }
 
   .footer-content {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
   }
 
-  .footer-attribution {
-    grid-column: 1 / -1;
-    order: 3;
+  .utility-grid {
+    grid-template-columns: 1fr;
   }
 }
 
