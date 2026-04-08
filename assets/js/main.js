@@ -208,14 +208,43 @@ function filterRecipes(activeCourses, activeEths) {
 
 // Mobile dropdown selects
 (function () {
-  var selects = document.querySelectorAll('.mobile-filter-select');
+  var selects   = document.querySelectorAll('.mobile-filter-select');
+  var resetBtn  = document.querySelector('.mobile-filter-reset');
   if (!selects.length) return;
+
   function onSelect() {
     var courseEl = document.querySelector('.mobile-filter-select[data-filter="course"]');
     var ethEl    = document.querySelector('.mobile-filter-select[data-filter="ethnicity"]');
     var course   = courseEl ? courseEl.value : '';
     var eth      = ethEl    ? ethEl.value    : '';
+    var isActive = !!(course || eth);
+
+    // Tint active selects so it's obvious a filter is applied
+    selects.forEach(function (sel) {
+      var active = !!sel.value;
+      sel.closest('.mobile-select-wrap').classList.toggle('is-active', active);
+    });
+
+    // Grey out the reset button when no filter is active
+    if (resetBtn) resetBtn.disabled = !isActive;
+
     filterRecipes(course ? [course] : [], eth ? [eth] : []);
   }
+
+  function resetAll() {
+    selects.forEach(function (sel) { sel.value = ''; });
+    onSelect();
+  }
+
   selects.forEach(function (sel) { sel.addEventListener('change', onSelect); });
+  if (resetBtn) resetBtn.addEventListener('click', resetAll);
+
+  // Re-apply filter when browser restores the page from bfcache (back navigation).
+  // Without this, the select shows the previous value but recipes are unfiltered.
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) onSelect();
+  });
+
+  // Also run once on load in case values were pre-filled by the browser.
+  onSelect();
 }());

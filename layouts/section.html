@@ -32,26 +32,29 @@
 {{- /* ── Mobile filter bar: dropdown selects (hidden on desktop) ── */ -}}
 {{- if or $cats $cuisines }}
 <div class="mobile-filter-bar" aria-label="{{ i18n "filter_aria_label" | default "Recipe filters" }}">
-  {{- if $cats }}
-  <div class="mobile-select-wrap">
-    <select class="mobile-filter-select" data-filter="course" aria-label="{{ i18n "filter_course" | default "Course" }}">
-      <option value="">{{ i18n "filter_all_courses" | default "All courses" }}</option>
-      {{- range $cats }}
-      <option value="{{ . | urlize }}">{{ . }}</option>
-      {{- end }}
-    </select>
+  <div class="mobile-filter-selects">
+    {{- if $cats }}
+    <div class="mobile-select-wrap">
+      <select class="mobile-filter-select" data-filter="course" aria-label="{{ i18n "filter_course" | default "Course" }}">
+        <option value="">{{ i18n "filter_all_courses" | default "All courses" }}</option>
+        {{- range $cats }}
+        <option value="{{ . | urlize }}">{{ . }}</option>
+        {{- end }}
+      </select>
+    </div>
+    {{- end }}
+    {{- if $cuisines }}
+    <div class="mobile-select-wrap">
+      <select class="mobile-filter-select" data-filter="ethnicity" aria-label="{{ i18n "filter_cuisine" | default "Cuisine" }}">
+        <option value="">{{ i18n "filter_all_cuisines" | default "All cuisines" }}</option>
+        {{- range $cuisines }}
+        <option value="{{ . | urlize }}">{{ . }}</option>
+        {{- end }}
+      </select>
+    </div>
+    {{- end }}
   </div>
-  {{- end }}
-  {{- if $cuisines }}
-  <div class="mobile-select-wrap">
-    <select class="mobile-filter-select" data-filter="ethnicity" aria-label="{{ i18n "filter_cuisine" | default "Cuisine" }}">
-      <option value="">{{ i18n "filter_all_cuisines" | default "All cuisines" }}</option>
-      {{- range $cuisines }}
-      <option value="{{ . | urlize }}">{{ . }}</option>
-      {{- end }}
-    </select>
-  </div>
-  {{- end }}
+  <button class="mobile-filter-reset" type="button" disabled>Reset filters</button>
 </div>
 {{- end }}
 

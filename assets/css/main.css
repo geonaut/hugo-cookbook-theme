@@ -780,8 +780,14 @@ footer .content-wrapper {
    ─────────────────────────────────────────────────────────────── */
 .mobile-filter-bar {
   display: flex;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
   margin: 0.75rem 0 1.25rem;
+}
+
+.mobile-filter-selects {
+  display: flex;
+  gap: 0.75rem;
 }
 
 @media (min-width: 769px) {
@@ -821,8 +827,44 @@ footer .content-wrapper {
   font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
-  /* Show focus ring for accessibility */
   outline-offset: 2px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Tint the select + arrow when a filter is active */
+.mobile-select-wrap.is-active .mobile-filter-select {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.mobile-select-wrap.is-active::after {
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+/* Reset button — subtle text link, greyed out when disabled */
+.mobile-filter-reset {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  padding: 0.125rem 0;
+  font-size: var(--md-sys-typescale-label-medium-size);
+  font-family: var(--font-sans);
+  color: var(--md-sys-color-on-surface-variant);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s;
+}
+
+.mobile-filter-reset:disabled {
+  color: var(--md-sys-color-outline);
+  cursor: default;
+  text-decoration: none;
+  opacity: 0.5;
+}
+
+.mobile-filter-reset:not(:disabled):hover {
+  color: var(--md-sys-color-on-surface);
 }
 
 /* ── Desktop sidebar internals ───────────────────────────────── */
