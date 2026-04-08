@@ -7,7 +7,7 @@
   <p class="footer-attribution">
     Built with <a href="https://gohugo.io" rel="noopener" class="footer-attr-link">Hugo</a>
     using <a href="https://github.com/geonaut/hugo-cookbook-theme" rel="noopener" class="footer-attr-link">cookbook-theme</a>
-    <span class="footer-attr-sep">|</span> Build:
+    <span class="footer-attr-sep" aria-hidden="true">|</span><br class="footer-attr-br"> Build:
     {{- with site.Params.buildCommit }}
     <a href="{{ site.Params.githubRepo }}/commit/{{ . }}" rel="noopener" class="footer-attr-link footer-attr-link--mono">{{ slicestr . 0 7 }}</a>
     {{- else }}
