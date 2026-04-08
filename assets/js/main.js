@@ -180,26 +180,42 @@ function makeFocusTrap(el) {
 }());
 
 // ── Recipe filter ────────────────────────────────────────────
+function filterRecipes(activeCourses, activeEths) {
+  document.querySelectorAll('.category-group').forEach(function (cat) {
+    var hasVisible = false;
+    cat.querySelectorAll('.recipe-item').forEach(function (item) {
+      var show = (!activeCourses.length || activeCourses.includes(item.dataset.course))
+              && (!activeEths.length    || activeEths.includes(item.dataset.ethnicity));
+      item.style.display = show ? '' : 'none';
+      if (show) hasVisible = true;
+    });
+    cat.style.display = hasVisible ? '' : 'none';
+  });
+}
+
+// Desktop sidebar checkboxes
 (function () {
   var checkboxes = document.querySelectorAll('.filter-checkbox');
   if (!checkboxes.length) return;
-
-  function filter() {
-    var activeCourses = Array.from(document.querySelectorAll('input[name="course"]:checked')).map(function (cb) { return cb.value; });
-    var activeEths    = Array.from(document.querySelectorAll('input[name="ethnicity"]:checked')).map(function (cb) { return cb.value; });
-
-    document.querySelectorAll('.category-group').forEach(function (cat) {
-      var hasVisible = false;
-      cat.querySelectorAll('.recipe-item').forEach(function (item) {
-        var courseMatch = !activeCourses.length || activeCourses.includes(item.dataset.course);
-        var ethMatch    = !activeEths.length    || activeEths.includes(item.dataset.ethnicity);
-        var show        = courseMatch && ethMatch;
-        item.style.display = show ? 'flex' : 'none';
-        if (show) hasVisible = true;
-      });
-      cat.style.display = hasVisible ? 'block' : 'none';
-    });
+  function onCheck() {
+    filterRecipes(
+      Array.from(document.querySelectorAll('input[name="course"]:checked')).map(function (cb) { return cb.value; }),
+      Array.from(document.querySelectorAll('input[name="ethnicity"]:checked')).map(function (cb) { return cb.value; })
+    );
   }
+  checkboxes.forEach(function (cb) { cb.addEventListener('change', onCheck); });
+}());
 
-  checkboxes.forEach(function (cb) { cb.addEventListener('change', filter); });
+// Mobile dropdown selects
+(function () {
+  var selects = document.querySelectorAll('.mobile-filter-select');
+  if (!selects.length) return;
+  function onSelect() {
+    var courseEl = document.querySelector('.mobile-filter-select[data-filter="course"]');
+    var ethEl    = document.querySelector('.mobile-filter-select[data-filter="ethnicity"]');
+    var course   = courseEl ? courseEl.value : '';
+    var eth      = ethEl    ? ethEl.value    : '';
+    filterRecipes(course ? [course] : [], eth ? [eth] : []);
+  }
+  selects.forEach(function (sel) { sel.addEventListener('change', onSelect); });
 }());

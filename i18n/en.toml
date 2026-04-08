@@ -27,8 +27,14 @@ other = "Recipe filters"
 [filter_course]
 other = "Course"
 
+[filter_all_courses]
+other = "All courses"
+
 [filter_cuisine]
 other = "Cuisine"
+
+[filter_all_cuisines]
+other = "All cuisines"
 
 [no_recipes_found]
 other = "No recipes found."

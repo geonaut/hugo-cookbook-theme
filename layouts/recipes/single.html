@@ -17,13 +17,28 @@
   {{- $banner := . }}
   {{- $sm := $banner }}{{- if gt $banner.Width 800 }}{{- $sm = $banner.Resize "800x" }}{{- end }}
   {{- $lg := $banner }}{{- if gt $banner.Width 1400 }}{{- $lg = $banner.Resize "1400x" }}{{- end }}
+
+  {{- /* Optional mobile-specific banner (different crop/aspect ratio) */}}
+  {{- $mobileSrc := "" }}
+  {{- with $page.Params.banner_mobile }}
+    {{- with $page.Resources.Get . }}
+      {{- $mob := . }}{{- if gt .Width 800 }}{{- $mob = .Resize "800x" }}{{- end }}
+      {{- $mobileSrc = $mob.RelPermalink }}
+    {{- end }}
+  {{- end }}
+
   <div class="recipe-header__banner">
-    <img
-      src="{{ $sm.RelPermalink }}"
-      srcset="{{ $sm.RelPermalink }} 800w, {{ $lg.RelPermalink }} 1400w"
-      sizes="100vw"
-      alt="{{ $page.Title }}"
-      fetchpriority="high">
+    <picture>
+      {{- if $mobileSrc }}
+      <source media="(max-width: 768px)" srcset="{{ $mobileSrc }}">
+      {{- end }}
+      <img
+        src="{{ $sm.RelPermalink }}"
+        srcset="{{ $sm.RelPermalink }} 800w, {{ $lg.RelPermalink }} 1400w"
+        sizes="100vw"
+        alt="{{ $page.Title }}"
+        fetchpriority="high">
+    </picture>
   </div>
   {{- end }}
   {{- end }}
