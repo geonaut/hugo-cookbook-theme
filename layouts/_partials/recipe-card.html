@@ -4,6 +4,7 @@
 */ -}}
 {{- $page     := .page }}
 {{- $hideTags := .hideTags | default false }}
+{{- $first    := .first | default false }}
 
 {{- $flag    := partialCached "recipe-flag.html" $page.Params.tags (delimit $page.Params.tags ",") }}
 {{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
@@ -24,7 +25,8 @@
       srcset="{{ $srcset }}"
       sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 900px) calc(50vw - 2rem), 300px"
       alt="{{ $page.Title }}"
-      decoding="async">
+      decoding="async"
+      {{- if $first }} fetchpriority="high"{{ end }}>
   </div>
   {{- end }}
   <div class="md3-card__content">

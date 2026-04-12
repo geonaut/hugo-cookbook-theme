@@ -169,8 +169,8 @@
 </noscript>
 {{- end }}
 
-{{ $css := resources.Get "css/main.css" | minify | fingerprint }}
-<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ $css := resources.Get "css/main.css" | minify }}
+<style>{{ $css.Content | safeCSS }}</style>
 {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
 {{- with site.Params.googleanalyticsid }}

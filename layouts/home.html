@@ -29,8 +29,10 @@
       <div class="recipe-grid carousel-track">
         {{- $featured := where (where site.RegularPages "Section" $recipesSection) "Params.featured" true -}}
         {{- $latest   := first 8 (where site.RegularPages "Section" $recipesSection) -}}
+        {{- $firstCard := true }}
         {{- range first 8 (union $featured $latest) }}
-          {{ partial "recipe-card.html" (dict "page" . "hideTags" true) }}
+          {{ partial "recipe-card.html" (dict "page" . "hideTags" true "first" $firstCard) }}
+          {{- $firstCard = false }}
         {{ end }}
       </div>
     </div>
