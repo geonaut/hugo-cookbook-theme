@@ -12,15 +12,19 @@
 
 <a href="{{ $page.RelPermalink }}" class="md3-card md3-card--compact">
   {{- with $img }}
-  {{- $sm := . }}{{- if gt .Width 400 }}{{- $sm = .Resize "400x webp" }}{{- end }}
-  {{- $md := . }}{{- if gt .Width 800 }}{{- $md = .Resize "800x webp" }}{{- end }}
+  {{- $sm := .Resize "400x webp" }}
+  {{- $srcset := printf "%s 400w" $sm.RelPermalink }}
+  {{- if gt .Width 800 }}
+    {{- $lg := .Resize "800x webp" }}
+    {{- $srcset = printf "%s, %s 800w" $srcset $lg.RelPermalink }}
+  {{- end }}
   <div class="md3-card__media">
     <img
       src="{{ $sm.RelPermalink }}"
-      srcset="{{ $sm.RelPermalink }} 400w, {{ $md.RelPermalink }} 800w"
+      srcset="{{ $srcset }}"
       sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 900px) calc(50vw - 2rem), 300px"
       alt="{{ $page.Title }}"
-      loading="lazy">
+      decoding="async">
   </div>
   {{- end }}
   <div class="md3-card__content">

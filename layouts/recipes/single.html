@@ -15,8 +15,8 @@
   {{- with .Params.banner }}
   {{- with $page.Resources.Get . }}
   {{- $banner := . }}
-  {{- $sm := $banner }}{{- if gt $banner.Width 800 }}{{- $sm = $banner.Resize "800x webp" }}{{- end }}
-  {{- $lg := $banner }}{{- if gt $banner.Width 1400 }}{{- $lg = $banner.Resize "1400x webp" }}{{- end }}
+  {{- $sm := $banner.Resize "800x webp" }}
+  {{- $lg := $sm }}{{- if gt $banner.Width 1400 }}{{- $lg = $banner.Resize "1400x webp" }}{{- end }}
 
   {{- /* Optional mobile-specific banner (different crop/aspect ratio) */}}
   {{- $mobileSrc := "" }}
