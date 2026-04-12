@@ -1,10 +1,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
-{{ with .Description }}<meta name="description" content="{{ . }}">{{ end }}
+<link rel="canonical" href="{{ .Permalink }}">
+{{- $desc := or .Description site.Params.description }}
+{{ with $desc }}<meta name="description" content="{{ . }}">{{ end }}
 {{ with .Params.image }}<meta property="og:image" content="{{ . | absURL }}">{{ end }}
 <meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}">
 <meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ with $desc }}<meta property="og:description" content="{{ . }}">{{ end }}
 
 {{- /*
   ── Color & Font system ───────────────────────────────────────
@@ -148,13 +152,21 @@
   entirely and supply your own @font-face rules via head/extra.html.
 */ -}}
 {{- $defaultFontsUrl := "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&subset=latin,latin-ext&display=swap" }}
-{{- $defaultIconsUrl := "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" }}
+{{- $defaultIconsUrl := "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=block" }}
 {{- $selfHosted := site.Params.fonts.selfHosted | default false }}
 {{- if not $selfHosted }}
+{{- $fontsUrl := site.Params.fonts.url | default $defaultFontsUrl }}
+{{- $iconsUrl := site.Params.fonts.iconsUrl | default $defaultIconsUrl }}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="{{ site.Params.fonts.url | default $defaultFontsUrl }}">
-<link rel="stylesheet" href="{{ site.Params.fonts.iconsUrl | default $defaultIconsUrl }}">
+<link rel="preload" as="style" href="{{ $fontsUrl }}">
+<link rel="stylesheet" href="{{ $fontsUrl }}" media="print" onload="this.media='all'">
+<link rel="preload" as="style" href="{{ $iconsUrl }}">
+<link rel="stylesheet" href="{{ $iconsUrl }}" media="print" onload="this.media='all'">
+<noscript>
+<link rel="stylesheet" href="{{ $fontsUrl }}">
+<link rel="stylesheet" href="{{ $iconsUrl }}">
+</noscript>
 {{- end }}
 
 {{ $css := resources.Get "css/main.css" | minify | fingerprint }}

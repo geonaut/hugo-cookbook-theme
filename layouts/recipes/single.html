@@ -99,4 +99,36 @@
   <div class="recipe-content">
     {{ .Content }}
   </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Recipe",
+  "name": {{ .Title | jsonify }},
+  {{- with .Params.blurb }}
+  "description": {{ . | jsonify }},
+  {{- end }}
+  "author": {
+    "@type": "Person",
+    "name": {{ site.Title | jsonify }}
+  },
+  "datePublished": {{ .Date.Format "2006-01-02" | jsonify }},
+  {{- with .Params.banner }}
+  {{- with $.Resources.Get . }}
+  "image": {{ .Permalink | jsonify }},
+  {{- end }}
+  {{- end }}
+  {{- with .Params.ingredients }}
+  "recipeIngredient": {{ . | jsonify }},
+  {{- end }}
+  {{- with .Params.instructions }}
+  "recipeInstructions": [
+    {{- range $i, $step := . }}{{ if $i }},{{ end }}
+    { "@type": "HowToStep", "text": {{ $step | jsonify }} }
+    {{- end }}
+  ],
+  {{- end }}
+  "url": {{ .Permalink | jsonify }}
+}
+</script>
 {{ end }}
