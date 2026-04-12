@@ -1,8 +1,9 @@
 <a href="{{ .RelPermalink }}" class="md3-card md3-card--writing">
   {{- $imgName := or .Params.thumbnail .Params.banner }}
   {{- with $imgName }}{{- with $.Resources.Get . }}
+  {{- $thumb := .Resize "600x webp" }}
   <div class="md3-card__media">
-    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+    <img src="{{ $thumb.RelPermalink }}" alt="{{ $.Title }}" loading="lazy" decoding="async">
   </div>
   {{- end }}{{- end }}
   
