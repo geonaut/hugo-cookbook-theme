@@ -114,6 +114,9 @@ header {
 
 .top-app-bar {
   background-color: var(--md-sys-color-surface-container);
+  background-image: url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='256'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.4' numOctaves='4' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='256' height='256' filter='url(%23n)' opacity='0.06'/></svg>");
+  background-repeat: repeat;
+  background-size: 256px 256px;
   box-shadow: var(--md-sys-elevation-1);
 }
 
@@ -972,6 +975,22 @@ footer .content-wrapper {
   width: 100%;
   padding: 2rem 0;
   text-align: left;
+}
+
+.page-hero--banner {
+  padding: 1.5rem 0;
+}
+
+.page-hero__banner-img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .page-hero__banner-img {
+    width: 50%;
+  }
 }
 
 .recipe-header .page-hero {

@@ -6,11 +6,17 @@
 {{- $recipesSection := site.Params.recipesSection | default "recipes" }}
 {{- $writingSection := site.Params.writingSection | default "writing" }}
 
+{{- with site.Params.homeBanner }}
+<div class="page-hero page-hero--banner">
+  <img src="{{ . | relURL }}" alt="{{ site.Title }}" class="page-hero__banner-img">
+</div>
+{{- else }}
 <div class="page-hero">
   {{ with site.Params.homeEyebrow }}<p class="page-hero__eyebrow small-caps">{{ . }}</p>{{ end }}
   <h1 class="page-hero__title">{{ .Title | default site.Title }}</h1>
   {{ with .Description }}<p class="page-hero__subtitle">{{ . }}</p>{{ end }}
 </div>
+{{- end }}
 
 <div class="home-sections">
   <!-- Recipes Section (Carousel) -->
