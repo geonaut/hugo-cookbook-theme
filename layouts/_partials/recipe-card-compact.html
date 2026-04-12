@@ -40,8 +40,8 @@
   <div class="md3-card__content">
     <h3 class="md3-card__title">{{ $page.Title }}</h3>
     <p class="md3-card__overline small-caps">
-      {{- with $flag.emoji }}<span class="recipe-flag">{{ . }}</span> {{ end }}
-      {{- $course -}}
+      {{- $course }}
+      {{- with $flag.emoji }} <span class="recipe-flag">{{ . }}</span>{{ end -}}
     </p>
   </div>
 </a>

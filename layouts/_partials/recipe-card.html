@@ -32,8 +32,8 @@
   <div class="md3-card__content">
     {{- with $page.Params.categories }}
     <p class="md3-card__overline small-caps">
-      {{- with $flag.emoji }}<span class="recipe-flag" aria-hidden="true">{{ . }}</span> {{ end }}
       {{- index . 0 }}
+      {{- with $flag.emoji }} <span class="recipe-flag" aria-hidden="true">{{ . }}</span>{{ end }}
     </p>
     {{- end }}
     <h3 class="md3-card__title">{{ $page.Title }}</h3>
