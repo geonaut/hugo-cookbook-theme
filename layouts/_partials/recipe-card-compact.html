@@ -1,32 +1,40 @@
 {{- /*
   recipe-card-compact.html
   Compact card used in the section index. Carries data attributes for JS filtering.
-  Usage: {{ partial "recipe-card-compact.html" . }}
+  Usage: {{ partial "recipe-card-compact.html" (dict "page" . "first" false) }}
+  Legacy: {{ partial "recipe-card-compact.html" . }} also accepted.
 */ -}}
-{{- $flag     := partialCached "recipe-flag.html" .Params.tags (delimit .Params.tags ",") }}
-{{- $course   := index .Params.categories 0 }}
+{{- $page  := . }}
+{{- $first := false }}
+{{- if reflect.IsMap . }}
+  {{- $page  = .page }}
+  {{- $first = .first | default false }}
+{{- end }}
+{{- $flag   := partialCached "recipe-flag.html" $page.Params.tags (delimit $page.Params.tags ",") }}
+{{- $course := index $page.Params.categories 0 }}
 
-<a href="{{ .RelPermalink }}"
+<a href="{{ $page.RelPermalink }}"
    class="md3-card md3-card--compact recipe-item"
    data-course="{{ $course | urlize }}"
    data-ethnicity="{{ $flag.tag | urlize }}">
 
-  {{- $imgName := or .Params.thumbnail .Params.banner }}
-  {{- with $imgName }}{{- with $.Resources.Get . }}
-  {{- $sm := . }}{{- if gt .Width 400 }}{{- $sm = .Resize "400x" }}{{- end }}
-  {{- $md := . }}{{- if gt .Width 800 }}{{- $md = .Resize "800x" }}{{- end }}
+  {{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
+  {{- with $imgName }}{{- with $page.Resources.Get . }}
+  {{- $sm := . }}{{- if gt .Width 400 }}{{- $sm = .Resize "400x webp" }}{{- end }}
+  {{- $md := . }}{{- if gt .Width 800 }}{{- $md = .Resize "800x webp" }}{{- end }}
   <div class="md3-card__media">
     <img
       src="{{ $sm.RelPermalink }}"
       srcset="{{ $sm.RelPermalink }} 400w, {{ $md.RelPermalink }} 800w"
       sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 900px) calc(50vw - 2rem), 200px"
-      alt="{{ $.Title }}"
-      decoding="async">
+      alt="{{ $page.Title }}"
+      decoding="async"
+      {{- if $first }} fetchpriority="high"{{ end }}>
   </div>
   {{- end }}{{- end }}
 
   <div class="md3-card__content">
-    <h3 class="md3-card__title">{{ .Title }}</h3>
+    <h3 class="md3-card__title">{{ $page.Title }}</h3>
     <p class="md3-card__overline small-caps">
       {{- with $flag.emoji }}<span class="recipe-flag">{{ . }}</span> {{ end }}
       {{- $course -}}

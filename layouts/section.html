@@ -102,6 +102,7 @@
 
   <!-- Grouped Grid Content -->
   <div class="recipe-index">
+    {{- $firstCard := true }}
     {{- if $cats }}
       {{- range $cats }}
         {{- $catName := . }}
@@ -111,7 +112,8 @@
           <h2 class="category-group__title">{{ $catName }}</h2>
           <div class="recipe-grid recipe-grid--compact">
             {{ range $catPages }}
-              {{ partial "recipe-card-compact.html" . }}
+              {{ partial "recipe-card-compact.html" (dict "page" . "first" $firstCard) }}
+              {{- $firstCard = false }}
             {{ end }}
           </div>
         </div>
@@ -120,7 +122,8 @@
     {{- else if $sectionPages }}
       <div class="recipe-grid recipe-grid--compact">
         {{ range $sectionPages }}
-          {{ partial "recipe-card-compact.html" . }}
+          {{ partial "recipe-card-compact.html" (dict "page" . "first" $firstCard) }}
+          {{- $firstCard = false }}
         {{ end }}
       </div>
     {{- else }}

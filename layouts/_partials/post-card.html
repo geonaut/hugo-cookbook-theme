@@ -4,8 +4,9 @@
 {{- with $imgName }}{{- with $.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}
 <a href="{{ .RelPermalink }}" class="post-card">
   {{- with $img }}
+  {{- $thumb := . }}{{- if gt .Width 600 }}{{- $thumb = .Resize "600x webp" }}{{- end }}
   <div class="post-card__media">
-    <img src="{{ .RelPermalink }}" alt="{{ $.Title }}" loading="lazy">
+    <img src="{{ $thumb.RelPermalink }}" alt="{{ $.Title }}" loading="lazy" decoding="async">
   </div>
   {{- end }}
   <div class="post-card__body">
