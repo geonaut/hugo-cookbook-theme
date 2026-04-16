@@ -6,7 +6,7 @@
 {{- $hideTags := .hideTags | default false }}
 {{- $first    := .first | default false }}
 
-{{- $flag    := partialCached "recipe-flag.html" $page.Params.tags (delimit $page.Params.tags ",") }}
+{{- $flag    := partialCached "recipe-flag.html" $page.Params.nationality $page.Params.nationality }}
 {{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
 {{- $img     := "" }}
 {{- with $imgName }}{{- with $page.Resources.Get . }}{{- $img = . }}{{- end }}{{- end }}
@@ -33,7 +33,7 @@
     {{- with $page.Params.categories }}
     <p class="md3-card__overline small-caps">
       {{- index . 0 }}
-      {{- with $flag.emoji }} <span class="recipe-flag" aria-hidden="true">{{ . }}</span>{{ end }}
+      {{- with $flag }} <span class="recipe-flag" aria-hidden="true">{{ . }}</span>{{ end }}
     </p>
     {{- end }}
     <h3 class="md3-card__title">{{ $page.Title }}</h3>
@@ -45,7 +45,7 @@
   <div class="md3-card__footer">
     {{- $count := 0 }}
     {{- range $page.Params.tags }}
-      {{- if and (ne . $flag.tag) (lt $count 4) }}
+      {{- if lt $count 4 }}
         <span class="chip chip--small">{{ . }}</span>
         {{- $count = add $count 1 }}
       {{- end }}

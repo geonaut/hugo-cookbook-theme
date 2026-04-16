@@ -18,11 +18,11 @@
 {{- end }}
 {{- $cats = sort $cats }}
 
-{{- /* Build sorted list of unique cuisine tags (those with a flag) in this section */ -}}
+{{- /* Build sorted list of unique nationalities in this section */ -}}
 {{- $cuisines := slice }}
 {{- range $sectionPages }}
-  {{- range .Params.tags }}
-    {{- if and (index hugo.Data.flags .) (not (in $cuisines .)) }}
+  {{- with .Params.nationality }}
+    {{- if not (in $cuisines .) }}
       {{- $cuisines = $cuisines | append . }}
     {{- end }}
   {{- end }}

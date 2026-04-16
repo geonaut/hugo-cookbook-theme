@@ -1,7 +1,5 @@
 {{ define "main" }}
-{{- $flagData := partialCached "recipe-flag.html" .Params.tags (delimit .Params.tags ",") }}
-{{- $flag := $flagData.emoji }}
-{{- $flagTag := $flagData.tag }}
+{{- $flag := partialCached "recipe-flag.html" .Params.nationality .Params.nationality }}
 {{- $page := . }}
 <nav class="breadcrumb small-caps" aria-label="{{ i18n "breadcrumb_label" | default "Breadcrumbs" }}">
   {{ range .Ancestors.Reverse }}
@@ -73,13 +71,11 @@
       <div class="metadata-line-2">
         <ul class="chip-list chip-list--small" aria-label="{{ i18n "tags_label" | default "Tags" }}">
           {{- range .Params.tags }}
-          {{- if ne . $flagTag }}
           <li>
             <a href="{{ "/tags/" | relURL }}{{ . | urlize }}" class="chip chip--small">
               {{- . -}}
             </a>
           </li>
-          {{- end }}
           {{- end }}
         </ul>
 

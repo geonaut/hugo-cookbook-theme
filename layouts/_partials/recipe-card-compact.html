@@ -10,13 +10,13 @@
   {{- $page  = .page }}
   {{- $first = .first | default false }}
 {{- end }}
-{{- $flag   := partialCached "recipe-flag.html" $page.Params.tags (delimit $page.Params.tags ",") }}
+{{- $flag   := partialCached "recipe-flag.html" $page.Params.nationality $page.Params.nationality }}
 {{- $course := index $page.Params.categories 0 }}
 
 <a href="{{ $page.RelPermalink }}"
    class="md3-card md3-card--compact recipe-item"
    data-course="{{ $course | urlize }}"
-   data-ethnicity="{{ $flag.tag | urlize }}">
+   data-ethnicity="{{ $page.Params.nationality | urlize }}">
 
   {{- $imgName := or $page.Params.thumbnail $page.Params.banner }}
   {{- with $imgName }}{{- with $page.Resources.Get . }}
@@ -41,7 +41,7 @@
     <h3 class="md3-card__title">{{ $page.Title }}</h3>
     <p class="md3-card__overline small-caps">
       {{- $course }}
-      {{- with $flag.emoji }} <span class="recipe-flag">{{ . }}</span>{{ end -}}
+      {{- with $flag }} <span class="recipe-flag">{{ . }}</span>{{ end -}}
     </p>
   </div>
 </a>
